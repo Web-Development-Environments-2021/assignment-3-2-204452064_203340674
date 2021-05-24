@@ -1,41 +1,28 @@
----
 openapi: 3.0.0
 info:
   title: Simple Inventory API
   description: This is a simple API
-  contact:
-    email: you@your-company.com
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
-servers:
-- url: https://virtserver.swaggerhub.com/hallelhel/firstAPI/1.0.0
-  description: SwaggerHub API Auto Mocking
-tags:
-- name: admins
-  description: Secured Admin-only calls
-- name: developers
-  description: Operations available to regular developers
 paths:
-  /register:
-    post:
-      tags:
-      - Auth
+  /register: #update
+   post:
+      tags: 
+        - Auth
       summary: A new user from the client is added to the server
       description: A JSON object contains all the details about the new user.
       requestBody:
-        description: Inventory item to add
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-        required: true
+              $ref: "#/components/schemas/User"
+        description: Inventory item to add      
       responses:
-        "201":
+        '201':
           description: A new user has been added
-        "400":
+        '400':
           description: wrong input parameters
+          
   /login:
     post:
       tags:
@@ -44,32 +31,43 @@ paths:
       description: The details user insert verified with the server
       operationId: loginUser
       requestBody:
+        required: true
         content:
           application/Json:
             schema:
-              $ref: '#/components/schemas/LoginScheme'
-        required: true
+              $ref: "#/components/schemas/LoginScheme"
+              
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
+                type: object
                 items:
-                  $ref: '#/components/schemas/inline_response_200'
-        "400":
+                  properties:
+                    username:
+                      type: string
+                    firstname:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+        '400':
           description: Invalid username/password supplied
-        "401":
+        '401':
           description: Authentication failed
+        
+          
   /logout:
     post:
       tags:
       - Auth
       summary: Logs out current logged in user session
       responses:
-        "200":
-          description: the user has been successfully logged out
+        '200':
+          description: "the user has been successfully logged out"
+  
   /user/favoritiesTeams:
     get:
       tags:
@@ -77,26 +75,25 @@ paths:
       summary: all teams show
       description: can only be done by the logged in user.
       operationId: showFavoritiesTeams
-      parameters:
+      parameters: 
       - name: FavoritiesTeamsId
         in: query
         description: id for get all favorities teams
         required: true
-        style: form
-        explode: true
         schema:
           type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Team'
-        "400":
+                    $ref : '#/components/schemas/Team'
+        '400':
           description: invalid input
+          
     post:
       tags:
       - user
@@ -104,17 +101,18 @@ paths:
       description: can only be done by the logged in user.
       operationId: addNewTeamToFavorities
       requestBody:
-        description: Inventory item to add
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Team'
-        required: true
+              $ref: "#/components/schemas/Team"
+        description: Inventory item to add      
       responses:
-        "201":
+        '201':
           description: A new team has been added to favorities
-        "400":
+        '400':
           description: wrong input parameters
+          
   /user/favoritiesPlayers:
     get:
       tags:
@@ -123,17 +121,24 @@ paths:
       summary: return the favorite players were saved by user
       description: can only be done by the logged in user.
       operationId: showFavoritiesPlayers
+      # parameters: 
+      # - name: FavoritiesPlayersId
+      #   in: query
+      #   description: id for get all favorities players
+      #   required: true
+      #   schema:
+      #     type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Player'
-        "400":
-          description: invalid input
+                    $ref : '#/components/schemas/Player'
+        '400':
+          description: invalid input  
     post:
       tags:
       - user
@@ -145,14 +150,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body'
+              type: object
+              properties:
+                playerId:
+                  type: string
+                  description: player id which the user saved
+                  example: 85
       responses:
-        "201":
+        '201':
           description: A new Player has been added to favorities
-        "400":
-          description: wrong input parameters
-        "401":
-          description: user is not authrized
+        '400':
+          description: wrong input parameters 
+        '401':
+          description: user is not authrized   
+          
   /user/favorities/games:
     get:
       tags:
@@ -160,26 +171,24 @@ paths:
       summary: all games show
       description: can only be done by the logged in user.
       operationId: showFavoritiesGamess
-      parameters:
+      parameters: 
       - name: FavoritiesGamesId
         in: query
         description: id for get all favorities games
         required: true
-        style: form
-        explode: true
         schema:
           type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Game'
-        "400":
-          description: invalid input
+                    $ref : '#/components/schemas/Game'
+        '400':
+          description: invalid input 
     post:
       tags:
       - user
@@ -187,20 +196,21 @@ paths:
       description: can only be done by the logged in user.
       operationId: addNewGameToFavorities
       requestBody:
-        description: Inventory item to add
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Game'
-        required: true
+              $ref: "#/components/schemas/Game"
+        description: Inventory item to add      
       responses:
-        "201":
+        '201':
           description: A new Game has been added to favorities
-        "400":
-          description: wrong input parameters
+        '400':
+          description: wrong input parameters         
+    
     delete:
       tags:
-      - user
+        - user
       summary: game removed from favorities
       description: can only be done by the logged in user.
       operationId: removeGameFromFavorities
@@ -209,32 +219,41 @@ paths:
         in: query
         description: game's id to remove
         required: true
-        style: form
-        explode: true
         schema:
           type: string
       responses:
-        "200":
-          description: Game removed successfully
-        "400":
-          description: wrong input parameters
+        '200':
+          description:  Game removed successfully
+        '400':
+          description: wrong input parameters 
+  
   /leagueDetails:
     get:
       tags:
       - league
-      summary: league details show on screeen
+      summary:  league details show on screeen
       description: all users can watch details
+      # operationId: leagueDetails
+      # parameters:
+      # - name: idLeague
+      #   in: query 
+      #   description: id of league to show
+      #   required: true
+      #   schema:
+      #     type: string     
       responses:
-        "200":
+        '200' : 
           description: league details to show
           content:
             application/json:
               schema:
-                type: array
+                type: array   
                 items:
                   $ref: '#/components/schemas/LeagueItems'
-        "400":
+        '400':
           description: wrong input parameters
+          
+  ##search player        
   /Player/basicInfo/{playerID}:
     get:
       tags:
@@ -247,19 +266,19 @@ paths:
         in: path
         description: id for get player's basic details
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Player'
-        "400":
-          description: invalid input
+                $ref : '#/components/schemas/Player'
+        '400':
+          description: invalid input 
+  
+  ##self page of player
   /Player/fullInfo/{playerID}:
     get:
       tags:
@@ -272,19 +291,70 @@ paths:
         in: path
         description: id for get player's full details
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlayerFullInfo'
-        "400":
-          description: invalid input
+                $ref : '#/components/schemas/PlayerFullInfo'
+        '400':
+          description: invalid input         
+          
+  
+  ##search coach
+  # /Coach/basicInfo/{coachID}:
+  #   get:
+  #     tags:
+  #     - Coach
+  #     summary: coach details show on screen
+  #     description: all users can watch details
+  #     operationId: CoachDetails
+  #     parameters:
+  #     - name: coachID
+  #       in: path
+  #       description: id for get coach's basic details
+  #       required: true
+  #       schema:
+  #         type: string
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref : '#/components/schemas/Coach'
+  #       '400':
+  #         description: invalid input 
+  
+  # /Coach/fullInfo/{coachID}:
+  #   get:
+  #     tags:
+  #     - Coach
+  #     summary: coach's full details show on screen
+  #     description: all users can watch details
+  #     operationId: CoachFullDetails
+  #     parameters:
+  #     - name: coachID
+  #       in: path
+  #       description: id for get coach's full details
+  #       required: true
+  #       schema:
+  #         type: string
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref : '#/components/schemas/CoachFullInfo'
+  #       '400':
+  #         description: invalid input
+  
+  
+  ##future game + associat represent do post
   /Game/basicInfo/{gameID}:
     get:
       tags:
@@ -297,19 +367,18 @@ paths:
         in: path
         description: id for get game's basic details
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Game'
-        "400":
+                $ref : '#/components/schemas/Game'
+        '400':
           description: invalid input
+          
     post:
       tags:
       - Game
@@ -321,22 +390,24 @@ paths:
         in: path
         description: game's id to add
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
       requestBody:
-        description: Inventory item to add
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Game'
-        required: true
+              $ref: "#/components/schemas/Game"
+        description: Inventory item to add      
       responses:
-        "201":
+        '201':
           description: A new Game has been added to system
-        "400":
-          description: wrong input parameters
+        '400':
+          description: wrong input parameters  
+    
+    
+  
+  ## past game
   /Game/fullInfo/{gameID}:
     get:
       tags:
@@ -349,19 +420,18 @@ paths:
         in: path
         description: id for get game's full details
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OldGame'
-        "400":
+                $ref : '#/components/schemas/OldGame'
+        '400':
           description: invalid input
+          
   /Game/score/{gameID}:
     post:
       tags:
@@ -374,22 +444,21 @@ paths:
         in: path
         description: game's id to add score
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: string
-              example: (0,1)
-        required: true
+              example: '(0,1)'
       responses:
-        "201":
+        '201':
           description: score update to game
-        "400":
+        '400':
           description: wrong input parameters
+  
   /Game/events/{gameID}:
     post:
       tags:
@@ -402,23 +471,23 @@ paths:
         in: path
         description: game's id to add events
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: array
               items:
                 $ref: '#/components/schemas/Event'
-        required: true
       responses:
-        "201":
+        '201':
           description: events update to game
-        "400":
-          description: wrong input parameters
+        '400':
+          description: wrong input parameters          
+          
+  #search team
   /Team/basicInfo/{teamID}:
     get:
       tags:
@@ -431,24 +500,24 @@ paths:
         in: path
         description: id for get team's basic details
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Team'
-        "400":
+                $ref : '#/components/schemas/Team'
+        '400':
           description: invalid input
+          
+  # team page        
   /Team/fullInfo/{teamID}:
     get:
       tags:
       - Team
-      summary: team detailes show on screen
+      summary: team detailes show on screen 
       description: all info of specific team
       operationId: TeamFullDetailes
       parameters:
@@ -456,30 +525,33 @@ paths:
         in: path
         description: id for get game full detailes
         required: true
-        style: simple
-        explode: false
-        schema:
+        schema: 
           type: integer
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TeamFullInfo'
-        "400":
+                $ref : '#/components/schemas/TeamFullInfo'
+        '400':
           description: invalid input
-        "404":
-          description: team id isnt exist
+        '404':
+          description: team id isnt exist  
+  
+          
+    
 components:
-  schemas:
+  schemas: #update
+  # represnt user register
     User:
       type: object
+      description: Model containing user info
       properties:
         username:
-          maxLength: 8
-          minLength: 3
           type: string
+          minLength: 3
+          maxLength: 8
           description: user name contains between 3 to 8 letters only
           example: mickyma
         firstname:
@@ -495,76 +567,101 @@ components:
           description: user's country
           example: Israel
         password:
-          maxLength: 10
+          type: string
           minLength: 5
-          type: string
-          description: |
-            password contains between 5 to 10 chars, at least one of them is number and special char
+          maxLength: 10
           format: password
+          description: >
+            password contains between 5 to 10 chars, at least one of them is number and special char
+          example: #mick2mini
         email:
-          pattern: email
           type: string
+          pattern: email
           description: user's email
           example: micky@gmail.com
         image-url:
-          pattern: URL
           type: string
+          pattern: URL
           description: URL for the user's image
           example: https://cloudinary.com/mickymaous
-      description: Model containing user info
     LoginScheme:
       type: object
       properties:
         username:
-          maxLength: 8
-          minLength: 3
           type: string
           description: username to loging
+          minLength: 3
+          maxLength: 8
           example: mickymaouse
         password:
-          maxLength: 10
-          minLength: 5
           type: string
           description: password to login
+          minLength: 5
+          maxLength: 10
           format: password
           example: mickyloveminy
+    
+    
     Player:
-      type: object
-      properties:
-        playername:
-          type: string
-          description: fullname of player
-          example: leo messi
-        teamname:
-          type: string
-          description: name of the specific team
-          example: Barcelona
-        playerPic:
-          type: string
-          description: URL for the player Pic
-          format: URL
-          example: https://cloudinary.com/messi
-        playerPosition:
-          type: string
-          description: player number
-          example: nine
+          type: object
+          # required:
+          #   - playerID
+          #   - playername
+          #   - teamname
+          #   - playerPic
+          #   - playerNum
+          properties:
+            # playerID:
+            #   type: string
+            #   description: id number
+            #   example: '65656'
+            playername:
+              type: string
+              description: fullname of player
+              example: leo messi
+            teamname:
+              type: string
+              description: name of the specific team
+              example: Barcelona
+            playerPic:
+              type: string
+              format: URL
+              description: URL for the player Pic
+              example: https://cloudinary.com/messi
+            playerPosition:
+              type: string
+              description: player number
+              example: nine            
+
+# uses for represent favorities teams & add new team to favorities       
     Team:
-      required:
-      - teamLogo
-      - teamname
       type: object
+      required:
+        # - teamID
+        - teamname
+        - teamLogo
       properties:
+        # teamID:
+        #   type: string
+        #   description: id number
+        #   example: '65656'
         teamname:
           type: string
           description: name of the specific team
           example: Barcelona
         teamLogo:
           type: string
-          description: URL for the team logo image
           format: URL
+          description: URL for the team logo image
           example: https://cloudinary.com/barca
+    
     TeamFullInfo:
       type: object
+      # required: 
+      #   - teamPlayers
+      #   - coach
+      #   - lastGames
+      #   - futureGame
       properties:
         teamname:
           type: string
@@ -574,7 +671,10 @@ components:
           type: array
           description: all team's players
           items:
-            $ref: '#/components/schemas/Player'
+            type: object
+            $ref : '#/components/schemas/Player'
+        # coach:
+        #   $ref: '#/components/schemas/Coach'
         lastGames:
           type: array
           items:
@@ -583,100 +683,177 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Game'
+          
+# uses for represent favorities players  & basic information         
+    
+          
+    # PlayerCreation:
+    #   type: object
+    #   # required:
+    #   #   - playerID
+    #   #   - playername
+    #   #   - plyerPic
+    #   #   - supergoalBook
+    #   properties:
+    #     # playerID:
+    #     #   type: string
+    #     #   description: id number
+    #     #   example: '65656'
+    #     playername:
+    #       type: string
+    #       description: fullname of player
+    #       example: leo messi
+    #     playerPic:
+    #       type: string
+    #       format: URL
+    #       description: URL for the player Pic
+    #       example: https://cloudinary.com/messi  
+    #     supergoalBook:
+    #       type: string
+          
     PlayerFullInfo:
-      required:
-      - age
-      - player
       type: object
+      required:
+        - player
+        - age
       properties:
         player:
-          $ref: '#/components/schemas/Player'
+          $ref : '#/components/schemas/Player'
         age:
           type: string
+
+
+# uses for represent favorities game & for next game in league items          
     Game:
       type: object
+      # required:
+      #   - gameDate
+      #   - gameTime
+      #   - homeTeam
+      #   - awayTeam
+      #   - field
       properties:
         gameDate:
           type: string
-          description: date of game
           format: date
-          example: 2011-08-08
+          example: '2011-08-08'
+          description : date of game
         gameTime:
           type: string
-          description: time of game
           format: time
-          example: 09:09:09
+          example: '09:09:09'
+          description : time of game
         homeTeam:
           type: string
         awayTeam:
           type: string
         field:
-          type: string
+          type: string  
+          
     OldGame:
       type: object
+      # required:
+      #   - game
+      #   - score
+      #   - events 
       properties:
         game:
           $ref: '#/components/schemas/Game'
         score:
           type: string
-          example: (1,1)
+          example: '(1,1)'
         events:
           type: array
           items:
             $ref: '#/components/schemas/Event'
+            
+      
     LeagueItems:
       type: object
+      # required:
+      #   - leaguename
+      #   - season
+      #   - stage
+      #   - nextgamedetails
       properties:
         leaguename:
           type: string
-          description: the current league
+          description : the current league
           example: super league
         season:
           type: string
           description: current season name
-          example: 2020/2021
+          example: "2020/2021"
         stage:
           type: string
           description: current stage name
           example: Championship round
         nextgamedetails:
           $ref: '#/components/schemas/Game'
+          
+    # Coach:
+    #   type: object
+    #   required:
+    #     - coachID
+    #     - coachname
+    #     - teamname
+    #     - coachPic
+    #   properties:
+    #     coachID:
+    #       type: string
+    #       description: id number
+    #       example: '65656'
+    #     coachname:
+    #       type: string
+    #       description: coach fullname
+    #       example: 
+    #     teamname:
+    #       type: string
+    #       description: name of the specific team
+    #       example: Barcelona
+    #     playerPic:
+    #       type: string
+    #       format: URL
+    #       description: URL for the coach Pic
+    #       example: https://cloudinary.com/pini
+    
+    # CoachFullInfo:
+    #   type: object
+    #   required:
+    #     - coach
+    #     - age
+    #   properties:
+    #     coach:
+    #       $ref : '#/components/schemas/Coach'
+    #     age:
+    #       type: string      
+
     Event:
       type: object
+      # required:
+      #   - date
+      #   - time
+      #   - minAtGame
+      #   - eventName
+      #   - player
       properties:
         date:
           type: string
-          description: date of game
           format: date
-          example: 2011-08-08
+          example: '2011-08-08'
+          description : date of game
         time:
           type: string
-          description: time of event
           format: time
-          example: 09:09:09
+          example: '09:09:09'
+          description : time of event 
         minAtGame:
           type: string
+          example: '40'
           description: specific min
-          example: "40"
         eventName:
           type: string
-          example: faul
+          example: 'faul'
         player:
           type: object
-          example: ronaldo
-    inline_response_200:
-      properties:
-        username:
-          type: string
-        firstname:
-          type: string
-        email:
-          type: string
-          format: email
-    body:
-      type: object
-      properties:
-        playerId:
-          type: string
-          description: player id which the user saved
-          example: "85"
+          example: 'ronaldo'
