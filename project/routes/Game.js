@@ -30,4 +30,6 @@ router.post("/basicInfo", async (req, res, next) => {
       next(error);
     }
   });
+
+  
   module.exports = router;
