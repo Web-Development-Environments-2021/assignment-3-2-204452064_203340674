@@ -4,7 +4,7 @@ const DButils = require("./utils/DButils");
 const users_utils = require("./utils/users_utils");
 const players_utils = require("./utils/players_utils");
 const games_utils = require("./utils/game_utils");
-
+const teams_utils = require("./utils/teams_utils");
 /**
  * Authenticate all incoming requests by middleware
  */

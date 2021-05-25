@@ -30,12 +30,12 @@ async function getCoach(team_id) {
   function extractRelevantTeamData(teams_info) {
     return teams_info.map((team_info) => {
       const { name , short_code } = team_info.data.data;
-      const team_name = name;
-      const { name } = player_info.data.data.country.data;
+      
+      //const { name } = team_info.data.data.country.data;
       return {
-        name: team_name,
+        name: name,
         short_name: short_code,
-        country: name,  
+        //country: name,  
       };
     });
   }
