@@ -378,20 +378,20 @@ paths:
                 $ref : '#/components/schemas/Game'
         '400':
           description: invalid input
-          
+  /Game/basicInfo:                
     post:
       tags:
       - Game
       summary: game added to system
       description: can only be done by the association represent.
       operationId: addNewGameTosystem
-      parameters:
-      - name: gameID
-        in: path
-        description: game's id to add
-        required: true
-        schema:
-          type: string
+      # parameters:
+      # - name: date
+      #   in: path
+      #   description: game's id to add
+      #   required: true
+      #   schema:
+      #     type: string
       requestBody:
         required: true
         content:
@@ -733,22 +733,22 @@ components:
       #   - awayTeam
       #   - field
       properties:
-        gameDate:
+        date:
           type: string
           format: date
           example: '2011-08-08'
           description : date of game
-        gameTime:
+        time:
           type: string
           format: time
           example: '09:09:09'
           description : time of game
-        homeTeam:
-          type: string
-        awayTeam:
-          type: string
-        field:
-          type: string  
+        home_team_id:
+          type: integer
+        away_team_id:
+          type: integer
+        field_id:
+          type: integer  
           
     OldGame:
       type: object
@@ -837,6 +837,10 @@ components:
       #   - eventName
       #   - player
       properties:
+        gameID:
+          type: integer
+          example: '2222'
+          description : id of game
         date:
           type: string
           format: date
