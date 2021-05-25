@@ -254,7 +254,7 @@ paths:
           description: wrong input parameters
           
   ##search player        
-  /Player/basicInfo/{playerID}:
+  /Player/basicInfo/{playerId}:
     get:
       tags:
       - player
@@ -279,7 +279,7 @@ paths:
           description: invalid input 
   
   ##self page of player
-  /Player/fullInfo/{playerID}:
+  /Player/fullInfo/{playerId}:
     get:
       tags:
       - player
@@ -287,12 +287,12 @@ paths:
       description: all users can watch details
       operationId: PlayerFullDetails
       parameters:
-      - name: playerID
-        in: path
+      - in: path
+        name: playerId
         description: id for get player's full details
         required: true
         schema:
-          type: string
+          type: integer
       responses:
         '200':
           description: successful operation
@@ -554,11 +554,11 @@ components:
           maxLength: 8
           description: user name contains between 3 to 8 letters only
           example: mickyma
-        firstname:
+        first_name:
           type: string
           description: user's first name
           example: micky
-        lastname:
+        last_name:
           type: string
           description: user's last name
           example: maous
@@ -571,15 +571,14 @@ components:
           minLength: 5
           maxLength: 10
           format: password
-          description: >
-            password contains between 5 to 10 chars, at least one of them is number and special char
-          example: #mick2mini
+          description: password contains between 5 to 10 chars, at least one of them is number and special char
+          example: mick@2mini
         email:
           type: string
           pattern: email
           description: user's email
           example: micky@gmail.com
-        image-url:
+        img:
           type: string
           pattern: URL
           description: URL for the user's image
@@ -592,14 +591,14 @@ components:
           description: username to loging
           minLength: 3
           maxLength: 8
-          example: mickymaouse
+          example: mickyma
         password:
           type: string
           description: password to login
           minLength: 5
           maxLength: 10
           format: password
-          example: mickyloveminy
+          example: mick@2mini
     
     
     Player:
@@ -631,7 +630,50 @@ components:
             playerPosition:
               type: string
               description: player number
-              example: nine            
+              example: nine    
+    PlayerFullInfo:
+      type: object
+      # required:
+      #   - player
+      #   - age
+      properties:
+        playername:
+          type: string
+          description: fullname of player
+          example: leo messi
+        teamname:
+          type: string
+          description: name of the specific team
+          example: Barcelona
+        playerPic:
+          type: string
+          format: URL
+          description: URL for the player Pic
+          example: https://cloudinary.com/messi
+        playerPosition:
+          type: string
+          description: player number
+          example: nine
+        commanName:
+          type: string
+          description: player comman name
+          example: J. Forrest
+        nationality:          
+          type: string
+          description: player nationality
+          example: Scotland  
+        birthcountry:
+          type: string
+          description: player birth country
+          example: Scotland
+        height:
+          type: string
+          description: player height
+          example: 175 cm
+        weight:
+          type: string
+          description: player weight
+          example: 80 kg
 
 # uses for represent favorities teams & add new team to favorities       
     Team:
@@ -711,16 +753,7 @@ components:
     #     supergoalBook:
     #       type: string
           
-    PlayerFullInfo:
-      type: object
-      required:
-        - player
-        - age
-      properties:
-        player:
-          $ref : '#/components/schemas/Player'
-        age:
-          type: string
+
 
 
 # uses for represent favorities game & for next game in league items          
