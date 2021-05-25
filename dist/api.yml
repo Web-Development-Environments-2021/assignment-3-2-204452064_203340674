@@ -68,20 +68,20 @@ paths:
         '200':
           description: "the user has been successfully logged out"
   
-  /user/favoritiesTeams:
+  /user/favoriteTeams:
     get:
       tags:
       - user
       summary: all teams show
       description: can only be done by the logged in user.
       operationId: showFavoritiesTeams
-      parameters: 
-      - name: FavoritiesTeamsId
-        in: query
-        description: id for get all favorities teams
-        required: true
-        schema:
-          type: string
+      # parameters: 
+      # - name: FavoritiesTeamsId
+      #   in: query
+      #   description: id for get all favorities teams
+      #   required: true
+      #   schema:
+      #     type: string
       responses:
         '200':
           description: successful operation
@@ -105,7 +105,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Team"
+              type: object
+              properties:
+                teamId:
+                  type: string
+                  description: team id which the user saved
+                  example: 939
         description: Inventory item to add      
       responses:
         '201':
@@ -113,7 +118,7 @@ paths:
         '400':
           description: wrong input parameters
           
-  /user/favoritiesPlayers:
+  /user/favoritePlayers:
     get:
       tags:
       - user
@@ -164,20 +169,20 @@ paths:
         '401':
           description: user is not authrized   
           
-  /user/favorities/games:
+  /user/favoriteGames:
     get:
       tags:
       - user
       summary: all games show
       description: can only be done by the logged in user.
       operationId: showFavoritiesGamess
-      parameters: 
-      - name: FavoritiesGamesId
-        in: query
-        description: id for get all favorities games
-        required: true
-        schema:
-          type: string
+      # parameters: 
+      # - name: FavoritiesGamesId
+      #   in: query
+      #   description: id for get all favorities games
+      #   required: true
+      #   schema:
+      #     type: string
       responses:
         '200':
           description: successful operation
@@ -196,12 +201,16 @@ paths:
       description: can only be done by the logged in user.
       operationId: addNewGameToFavorities
       requestBody:
-        required: true
+        # required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Game"
-        description: Inventory item to add      
+              type: object
+              properties:
+                gameId:
+                  type: string
+                  description: Inventory item to add
+                  example: 3  
       responses:
         '201':
           description: A new Game has been added to favorities
