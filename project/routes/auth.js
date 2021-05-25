@@ -15,6 +15,7 @@ router.post("/Register", async (req, res, next) => {
     if (users.find((x) => x.username === req.body.username))
       throw { status: 409, message: "Username taken" };
 
+
     //hash the password
     let hash_password = bcrypt.hashSync(
       req.body.password,
@@ -24,7 +25,8 @@ router.post("/Register", async (req, res, next) => {
 
     // add the new username
     await DButils.execQuery(
-      `INSERT INTO dbo.users (username, password) VALUES ('${req.body.username}', '${hash_password}')`
+      `INSERT INTO dbo.users (username, first_name, last_name, country, password, email, img) VALUES 
+      ('${req.body.username}', '${req.body.first_name}', '${req.body.last_name}', '${req.body.country}', '${hash_password}' ,'${req.body.email}', '${req.body.img}')`
     );
     res.status(201).send("user created");
   } catch (error) {
