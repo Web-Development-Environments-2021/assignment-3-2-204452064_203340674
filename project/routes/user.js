@@ -79,6 +79,7 @@ router.get("/favoriteGames", async (req, res, next) => {
   }
 });
 
+
 router.post("/favoriteTeams", async (req, res, next) => {
   try {
     const user_id = req.session.user_id;

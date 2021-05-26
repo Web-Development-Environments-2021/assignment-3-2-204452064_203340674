@@ -11,7 +11,7 @@ router.get("/fullInfo/:teamID", async (req, res, next) => {
     team_details.push(team_players_details);
     const coach = await teams_utils.getCoach(req.params.teamID)
     team_details.push(coach);
-    //const team_past_games_by_Season_ID = await 
+    //const team_past_games_by_Season_ID = await
     // const team_future_games = await 
     //we should keep implementing team page.....
     res.send(team_details);

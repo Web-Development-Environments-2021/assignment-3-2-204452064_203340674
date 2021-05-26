@@ -384,10 +384,30 @@ paths:
           content:
             application/json:
               schema:
-                $ref : '#/components/schemas/Game'
+                type: array
+                items:
+                  $ref : '#/components/schemas/Game'
         '400':
           description: invalid input
-  /Game/basicInfo:                
+
+
+
+  /Game/basicInfo: 
+    get:
+      tags:
+      - Game
+      summary: game details show on screen
+      description: all users can watch details
+      operationId: GameDetails
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/Game'
+        '400':
+          description: invalid input            
     post:
       tags:
       - Game
@@ -440,28 +460,36 @@ paths:
                 $ref : '#/components/schemas/OldGame'
         '400':
           description: invalid input
+  /Game/fullInfo:
+    get:
+      tags:
+      - Game
+      summary: game details show on screen
+      description: all users can watch details
+      operationId: OldGameDetails
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/OldGame'
+        '400':
+          description: invalid input
           
-  /Game/score/{gameID}:
+  /Game/score:
     post:
       tags:
       - Game
       summary: score added to specific game
       description: can only be done by the associate represent.
       operationId: addScoreToGame
-      parameters:
-      - name: gameID
-        in: path
-        description: game's id to add score
-        required: true
-        schema:
-          type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: string
-              example: '(0,1)'
+              $ref: "#/components/schemas/ScoreTOGame"
       responses:
         '201':
           description: score update to game
@@ -607,9 +635,7 @@ components:
           minLength: 5
           maxLength: 10
           format: password
-          example: mick@2mini
-    
-    
+          example: mick@2mini 
     Player:
           type: object
           # required:
@@ -683,7 +709,6 @@ components:
           type: string
           description: player weight
           example: 80 kg
-
 # uses for represent favorities teams & add new team to favorities       
     Team:
       type: object
@@ -704,8 +729,7 @@ components:
           type: string
           format: URL
           description: URL for the team logo image
-          example: https://cloudinary.com/barca
-    
+          example: https://cloudinary.com/barca  
     TeamFullInfo:
       type: object
       # required: 
@@ -785,13 +809,19 @@ components:
           format: time
           example: '09:09:09'
           description : time of game
-        home_team_id:
-          type: integer
-        away_team_id:
-          type: integer
-        field_id:
-          type: integer  
-          
+        home_team_name:
+          type: string
+          example: Midtjylland
+        away_team_name:
+          type: string
+          example: København
+        field_name:
+          type: string
+          example: Meadowbank Dorking
+        referee:
+          type: string
+          example: pini 
+
     OldGame:
       type: object
       # required:
@@ -799,17 +829,53 @@ components:
       #   - score
       #   - events 
       properties:
-        game:
-          $ref: '#/components/schemas/Game'
-        score:
+        date:
           type: string
-          example: '(1,1)'
+          format: date
+          example: '2011-08-08'
+          description : date of game
+        time:
+          type: string
+          format: time
+          example: '09:09:09'
+          description : time of game
+        home_team_name:
+          type: string
+          example: Midtjylland
+        away_team_name:
+          type: string
+          example: København
+        field_name:
+          type: string
+          example: Meadowbank Dorking
+        gaol_home:
+          type: integer
+          example: 2
+        goal_away:
+          type: integer
+          example: 1
+        referee:
+          type: string
+          example: pini 
         events:
           type: array
           items:
             $ref: '#/components/schemas/Event'
-            
-      
+    ScoreTOGame:
+      type: object
+      properties: 
+        game_id:
+          type: integer
+          example: 1
+          description : id of the game
+        goal_home:
+          type: integer
+          example: 3
+          description : nuber off gaol's home team 
+        goal_away:
+          type: integer
+          example: 1
+          description : nuber off gaol's away team        
     LeagueItems:
       type: object
       # required:
