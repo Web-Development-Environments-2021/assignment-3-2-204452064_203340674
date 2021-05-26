@@ -32,6 +32,7 @@ async function getPlayersInfo(players_ids_list) {
   return extractRelevantPlayerData(players_info);
 }
 
+//get player full info for self page
 async function getPlayerfullDetails(player_id){
   const player_info = await axios.get(`${api_domain}/players/${player_id}`, {
     params: {
