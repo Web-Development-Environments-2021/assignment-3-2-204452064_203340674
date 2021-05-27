@@ -416,8 +416,6 @@ paths:
         '400':
           description: invalid input
 
-
-
   /Game/basicInfo: 
     get:
       tags:
@@ -440,13 +438,6 @@ paths:
       summary: game added to system
       description: can only be done by the association represent.
       operationId: addNewGameTosystem
-      # parameters:
-      # - name: date
-      #   in: path
-      #   description: game's id to add
-      #   required: true
-      #   schema:
-      #     type: string
       requestBody:
         required: true
         content:
@@ -522,28 +513,19 @@ paths:
         '400':
           description: wrong input parameters
   
-  /Game/events/{gameID}:
+  /Game/events:
     post:
       tags:
       - Game
       summary: events added to specific game
       description: can only be done by the associate represent.
       operationId: addEventsToGame
-      parameters:
-      - name: gameID
-        in: path
-        description: game's id to add events
-        required: true
-        schema:
-          type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/Event'
+                $ref: '#/components/schemas/event'
       responses:
         '201':
           description: events update to game
@@ -984,18 +966,12 @@ components:
     #     age:
     #       type: string      
 
-    Event:
+    event:
       type: object
-      # required:
-      #   - date
-      #   - time
-      #   - minAtGame
-      #   - eventName
-      #   - player
       properties:
         gameID:
           type: integer
-          example: '2222'
+          example: 1
           description : id of game
         date:
           type: string
@@ -1008,12 +984,15 @@ components:
           example: '09:09:09'
           description : time of event 
         minAtGame:
-          type: string
-          example: '40'
+          type: integer
+          example: 40
           description: specific min
         eventName:
           type: string
-          example: 'faul'
-        player:
-          type: object
-          example: 'ronaldo'
+          example: faul
+        player1:
+          type: string
+          example: ronaldo
+        player2:
+          type: string
+          example: shimon gershon
