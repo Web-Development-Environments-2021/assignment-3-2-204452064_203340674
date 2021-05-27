@@ -117,7 +117,41 @@ async function getPlayersByTeam(team_id) {
   return players_info;
 }
 
+async function getPlayerbasicDetailsByTeam(player_name, team_name){
+  const all_player_with_same_name = await axios.get(`${api_domain}/players/search/${player_name}`, {
+    params: {
+      api_token: process.env.api_token,
+      include: "team.league", 
+      },
+    })
+    return all_player_with_same_name.data.data.map((player_info) => {
+      if(player_info != undefined)
+      {
+        const { fullname, image_path, position_id } = player_info;
+        if( player_info.team == `${team_name}`)
+        {
+          const { name } = player_info.team.data;
+          if(player_info.team.data.league != undefined)
+          {
+            const {id} = player_info.team.data.league.data;
+            if(id == 271) 
+            {
+              return {
+                  name: fullname,
+                  image: image_path,
+                  position: position_id,
+                  team_name: name,       
+                };
+            }
+          }
+        }
+      }  
+      
+    }); 
+  }
+
 exports.getPlayersByTeam = getPlayersByTeam;
 exports.getPlayersInfo = getPlayersInfo;
 exports.getPlayerfullDetails = getPlayerfullDetails;
-exports.getPlayerbasicDetailsByName = getPlayerbasicDetailsByName
+exports.getPlayerbasicDetailsByName = getPlayerbasicDetailsByName;
+exports.getPlayerbasicDetailsByTeam =getPlayerbasicDetailsByTeam;

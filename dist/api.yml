@@ -236,7 +236,7 @@ paths:
         '400':
           description: wrong input parameters 
   
-  /leagueDetails:
+  /league/leagueDetails:
     get:
       tags:
       - league
@@ -338,7 +338,32 @@ paths:
         '400':
           description: invalid input
 
-  
+  /Player/basicInfoByTeam/{playerName}&{teamName}:
+    get:
+        tags:
+        - player
+        summary: player details show on screen
+        description: all users can watch details
+        # operationId: PlayerDetails
+        parameters:
+        - name: playerNameWithTeamName
+          in: path
+          description: name for get player's basic details
+          required: true
+          schema:
+            type: string
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref : '#/components/schemas/Player'
+          '204':
+            description: No Content         
+          '400':
+            description: invalid input
+
   ##search coach
   # /Coach/basicInfo/{coachID}:
   #   get:

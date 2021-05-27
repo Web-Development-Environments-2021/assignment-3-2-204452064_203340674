@@ -68,5 +68,7 @@ function getAllEventForGame(events, gameId){
 }
 
 
+
+
 exports.getfutureGameInfo= getfutureGameInfo;
-exports.getAllGame=getAllGame
+exports.getAllGame=getAllGame;
