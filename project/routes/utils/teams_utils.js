@@ -39,7 +39,30 @@ async function getCoach(team_id) {
       };
     });
   }
+  async function getTeambasicDetailsByName(team_name){
+    const all_team_with_same_name = await axios.get(`${api_domain}/teams/search/${team_name}`, {
+      params: {
+        api_token: process.env.api_token,
+        include: "league", 
+        },
+      })
+      return all_team_with_same_name.data.data.map((team_info) =>{
+        if(team_info != undefined)
+        {
+          const { name , logo_path } = team_info;
+          const {id} = team_info.league.data
+          if(id == 271){
+          return{
+            name: name,
+            image: logo_path,
+
+            }; 
+          }
+        }
+      })
+    }
 
 
   exports.getCoach = getCoach;
   exports.getTeamsInfo = getTeamsInfo;
+  exports.getTeambasicDetailsByName = getTeambasicDetailsByName;

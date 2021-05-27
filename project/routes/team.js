@@ -20,5 +20,13 @@ router.get("/fullInfo/:teamID", async (req, res, next) => {
   }
 
 });
+router.get("/basicInfo/:teamName", async(req, res, next) =>{    
+  try {
+      let team_det = await teams_utils.getTeambasicDetailsByName(req.params.teamName);
+      res.send(team_det);
+  } catch (error) {
+      next(error);
+  }
+});
 
 module.exports = router;
