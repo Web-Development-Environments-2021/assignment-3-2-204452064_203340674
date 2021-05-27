@@ -33,7 +33,7 @@ async function getPlayersInfo(players_ids_list) {
 }
 //use when search name of player. supply preview of all players with same name:
 async function getPlayerbasicDetailsByName(player_name){
-  let all_player_with_same_name_list = [];
+  
   const all_player_with_same_name = await axios.get(`${api_domain}/players/search/${player_name}`, {
     params: {
       api_token: process.env.api_token,
@@ -48,7 +48,7 @@ async function getPlayerbasicDetailsByName(player_name){
         {
           const { name } = player_info.team.data;
           if(player_info.team.data.league != undefined)
-          {
+          {S
             const {id} = player_info.team.data.league.data;
             if(id == 271) 
             {
