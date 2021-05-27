@@ -3,6 +3,16 @@ var router = express.Router();
 const DButils = require("./utils/DButils");
 const players_utils = require("./utils/players_utils");
 
+// get for search page - this search allow full name and part of name:
+router.get("/basicInfo/:playerName", async(req, res, next) =>{ 
+    
+    try {
+        let player_det = await players_utils.getPlayerbasicDetailsByName(req.params.playerName);
+        res.send(player_det);
+    } catch (error) {
+        next(error);
+    }
+});
 router.get("/fullInfo/:playerId", async(req, res, next) =>{
 
     try {
@@ -12,5 +22,4 @@ router.get("/fullInfo/:playerId", async(req, res, next) =>{
         next(error);
     }
 });
-
 module.exports = router;

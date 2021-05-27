@@ -311,7 +311,33 @@ paths:
                 $ref : '#/components/schemas/PlayerFullInfo'
         '400':
           description: invalid input         
-          
+ 
+  /Player/basicInfo/{playerName}:
+    get:
+      tags:
+      - player
+      summary: player details show on screen
+      description: all users can watch details
+      # operationId: PlayerDetails
+      parameters:
+      - name: playerName
+        in: path
+        description: name for get player's basic details
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/Player'
+        '204':
+          description: No Content         
+        '400':
+          description: invalid input
+
   
   ##search coach
   # /Coach/basicInfo/{coachID}:
@@ -525,7 +551,7 @@ paths:
           description: wrong input parameters          
           
   #search team
-  /Team/basicInfo/{teamID}:
+  /Team/basicInfoID/{teamID}:
     get:
       tags:
       - Team
@@ -576,8 +602,31 @@ paths:
         '404':
           description: team id isnt exist  
   
-          
-    
+  /Team/basicInfoName/{teamName}:
+    get:
+      tags:
+      - Team
+      summary: team details show on screen
+      description: all users can watch details
+      #operationId: teamDetails
+      parameters:
+      - name: teamName
+        in: path
+        description: name for get team's basic details
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/Team'
+        '204':
+          description: No Content       
+        '400':
+          description: invalid input
 components:
   schemas: #update
   # represnt user register
@@ -709,7 +758,9 @@ components:
           type: string
           description: player weight
           example: 80 kg
-# uses for represent favorities teams & add new team to favorities       
+
+  # uses for represent favorities teams & add new team to favorities       
+
     Team:
       type: object
       required:
@@ -785,9 +836,6 @@ components:
     #       example: https://cloudinary.com/messi  
     #     supergoalBook:
     #       type: string
-          
-
-
 
 # uses for represent favorities game & for next game in league items          
     Game:

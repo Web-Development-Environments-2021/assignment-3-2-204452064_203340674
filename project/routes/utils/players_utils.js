@@ -31,8 +31,46 @@ async function getPlayersInfo(players_ids_list) {
   let players_info = await Promise.all(promises);
   return extractRelevantPlayerData(players_info);
 }
+//use when search name of player. supply preview of all players with same name:
+async function getPlayerbasicDetailsByName(player_name){
+  
+  const all_player_with_same_name = await axios.get(`${api_domain}/players/search/${player_name}`, {
+    params: {
+      api_token: process.env.api_token,
+      include: "team.league", 
+      },
+    })
+    return all_player_with_same_name.data.data.map((player_info) => {
+      if(player_info != undefined)
+      {
+        const { fullname, image_path, position_id } = player_info;
+        if( player_info.team != undefined)
+        {
+          const { name } = player_info.team.data;
+          if(player_info.team.data.league != undefined)
+          {S
+            const {id} = player_info.team.data.league.data;
+            if(id == 271) 
+            {
+              return {
+                  name: fullname,
+                  image: image_path,
+                  position: position_id,
+                  team_name: name,       
+                };
+            }
+          }
+        }
+      }  
+      
+    }); 
+  }
+
+
+    
 
 //get player full info for self page
+
 async function getPlayerfullDetails(player_id){
   const player_info = await axios.get(`${api_domain}/players/${player_id}`, {
     params: {
@@ -68,10 +106,8 @@ function extractRelevantPlayerData(players_info) {
       image: image_path,
       position: position_id,
       team_name: name,
-      number_of_trophies: length,
-      
-      
-    };
+      number_of_trophies: length,};
+
   });
 }
 
@@ -84,3 +120,4 @@ async function getPlayersByTeam(team_id) {
 exports.getPlayersByTeam = getPlayersByTeam;
 exports.getPlayersInfo = getPlayersInfo;
 exports.getPlayerfullDetails = getPlayerfullDetails;
+exports.getPlayerbasicDetailsByName = getPlayerbasicDetailsByName
