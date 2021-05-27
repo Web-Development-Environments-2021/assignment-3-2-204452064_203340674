@@ -1,3 +1,4 @@
+const { errorMonitor } = require("events");
 var express = require("express");
 var router = express.Router();
 const DButils = require("../routes/utils/DButils");
@@ -5,8 +6,7 @@ const games_utils = require("./utils/game_utils");
 
 //insert new game to the database
 router.post("/basicInfo", async (req, res, next) => { 
-  try {
-      
+  try { 
       // parameters exists
       // valid parameters
       // teams exists in same date
@@ -52,13 +52,26 @@ router.post("/basicInfo", async (req, res, next) => {
   router.post("/score", async (req, res, next) =>{
     try {
       await DButils.execQuery(
-      `insert into dbo.games (goal_home, goal_away) values ('${req.body.goal_home}', '${req.body.goal_away}') where game_id='${req.body.game_id}'` 
+      `UPDATE dbo.games set goal_home='${req.body.goal_home}', goal_away='${req.body.goal_away}' where game_id='${req.body.game_id}'` 
     );
-    res.status(201).send("score added to the game");
+      res.status(201).send("score added to the game");
     } catch (error) {
       next(error)
     }
 
   })
+
+  router.post("/events", async (req, res, next) =>{
+    try {
+      await DButils.execQuery(
+        `INSERT INTO games_events (game_id, date, time, minute, event_name, player_id_1, player_id_2) VALUES ('${req.body.gameID}', '${req.body.date}', '${req.body.time}','${req.body.minAtGame}',
+        '${req.body.eventName}', '${req.body.player1}', '${req.body.player2}')`
+        );
+        res.status(201).send("event added to the game's events Schedule");
+    } catch (error) {
+      next(error)
+    }
+  })
+
   
   module.exports = router;

@@ -38,8 +38,8 @@ async function getAllGame(){
     for (var i=0; i< gameDet.length; i++){
         // let fullGame = []
         if(gameDet[i].goal_home != null){
-            let eventsSchedule= getAllEventForGame(eventsForGames, gameDet[i].game_id);
-            gameDet[i].events = gameEvents;
+            let gameEvents= getAllEventForGame(eventsForGames, gameDet[i].game_id);
+            gameDet[i].eventsSchedule = gameEvents;
             allDataToReturn.push(gameDet[i])
     }}
     return allDataToReturn;
