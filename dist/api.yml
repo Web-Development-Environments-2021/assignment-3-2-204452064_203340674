@@ -477,7 +477,8 @@ paths:
                 $ref : '#/components/schemas/OldGame'
         '400':
           description: invalid input
-  /Game/fullInfo:
+
+  /Game/allGame:
     get:
       tags:
       - Game
@@ -890,7 +891,7 @@ components:
         events:
           type: array
           items:
-            $ref: '#/components/schemas/Event'
+            $ref: '#/components/schemas/event'
     ScoreTOGame:
       type: object
       properties: 

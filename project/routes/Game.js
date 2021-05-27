@@ -38,7 +38,7 @@ router.post("/basicInfo", async (req, res, next) => {
   });
 
 
-  router.get("/fullInfo", async (req, res, next) =>{
+  router.get("/allGame", async (req, res, next) =>{
     try {
       let game_ids_array = [];
       const results_game = await games_utils.getAllGame(game_ids_array);

@@ -22,6 +22,7 @@ async function getSpicificGameInfo(game_id){
     return gamedet;
 }
 
+// return all the game, past and future
 async function getAllGame(){
     // const games = await DButils.execQuery(`select games.date, games.time, games.home_team_name, games.away_team_name, games.field_name, 
     // games.goal_home, games.goal_away, games.referee, games_events.date, games_events.time, games_events.minute, games_events.event_name from games, games_events
@@ -40,15 +41,28 @@ async function getAllGame(){
         if(gameDet[i].goal_home != null){
             let gameEvents= getAllEventForGame(eventsForGames, gameDet[i].game_id);
             gameDet[i].eventsSchedule = gameEvents;
+            allDataToReturn.push(gameDet[i]);
+        }
+        else{
             allDataToReturn.push(gameDet[i])
+
+        
     }}
     return allDataToReturn;
 }
 
+// return all the events for spicific game
 function getAllEventForGame(events, gameId){
     let eventsGame=[]
-    if (events.find((x) => x.game_id === gameId))
-        eventsGame.push(x)
+    for (var i=0; i< events.length; i++){
+        if(events[i].game_id===gameId){
+            delete events[i].game_id;
+            eventsGame.push(events[i])
+        }
+    }
+    // if (events.find((x) => x.game_id === gameId)){
+    //     console.log(x) 
+    // }
     return eventsGame
         
 }
