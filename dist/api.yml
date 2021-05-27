@@ -523,7 +523,7 @@ paths:
           description: wrong input parameters          
           
   #search team
-  /Team/basicInfo/{teamID}:
+  /Team/basicInfoID/{teamID}:
     get:
       tags:
       - Team
@@ -574,7 +574,7 @@ paths:
         '404':
           description: team id isnt exist  
   
-  /Team/basicInfo/{teamName}:
+  /Team/basicInfoName/{teamName}:
     get:
       tags:
       - Team
@@ -732,8 +732,7 @@ components:
           type: string
           description: player weight
           example: 80 kg
-
-# uses for represent favorities teams & add new team to favorities       
+  # uses for represent favorities teams & add new team to favorities       
     Team:
       type: object
       required:

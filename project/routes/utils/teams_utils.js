@@ -27,14 +27,16 @@ async function getCoach(team_id) {
     let teams_info = await Promise.all(promises);
     return extractRelevantTeamData(teams_info);
   }
+  
   function extractRelevantTeamData(teams_info) {
     return teams_info.map((team_info) => {
-      const { name , short_code } = team_info.data.data;
+      const { name , short_code, logo_path } = team_info.data.data;
       
       //const { name } = team_info.data.data.country.data;
       return {
         name: name,
         short_name: short_code,
+        // image: logo_path,
         //country: name,  
       };
     });
@@ -61,8 +63,25 @@ async function getCoach(team_id) {
         }
       })
     }
-
-
+    async function getTeambasicDetailsByID(team_ID){
+      const team_info = await axios.get(`${api_domain}/teams/${team_ID}`, {
+        params: {
+          api_token: process.env.api_token,
+          include: "league", 
+          },
+        })
+          const { name , logo_path } = team_info.data.data;
+          const {id} = team_info.data.data.league.data
+          if(id == 271){
+            return {
+              name: name,
+              image: logo_path,
+                
+            };
+          }
+        
+      }
   exports.getCoach = getCoach;
   exports.getTeamsInfo = getTeamsInfo;
   exports.getTeambasicDetailsByName = getTeambasicDetailsByName;
+  exports.getTeambasicDetailsByID = getTeambasicDetailsByID;
