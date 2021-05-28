@@ -22,12 +22,20 @@ router.get("/fullInfo/:playerId", async(req, res, next) =>{
         next(error);
     }
 });
-// router.get("/basicInfoByTeam/:playerName&:teamName", async(req, res, next) =>{
-//     try{
-//         const player_det = await players_utils.getPlayerbasicDetailsByTeam(req.params.playerName, req.params.teamName);
-//         res.send(player_det);
-//     }catch (error){
-//         next(error);
-//     }
-//     });
+router.get("/basicInfoByTeam/:playerName/:teamName", async(req, res, next) =>{
+    try{
+        const player_det = await players_utils.getPlayerbasicDetailsByTeam(req.params.playerName, req.params.teamName);
+        res.send(player_det);
+    }catch (error){
+        next(error);
+    }
+    });
+router.get("/basicInfoByPosition/:playerName/:positionName", async(req, res, next) =>{
+    try{
+        const player_det = await players_utils.getPlayerbasicDetailsByPosition(req.params.playerName, req.params.positionName);
+        res.send(player_det);
+    }catch (error){
+        next(error);
+    }
+    });    
 module.exports = router;

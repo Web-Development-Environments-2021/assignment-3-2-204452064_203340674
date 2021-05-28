@@ -338,7 +338,7 @@ paths:
         '400':
           description: invalid input
 
-  /Player/basicInfoByTeam/{playerName}&{teamName}:
+  /Player/basicInfoByTeam/{playerName}/{teamName}:
     get:
         tags:
         - player
@@ -346,12 +346,50 @@ paths:
         description: all users can watch details
         # operationId: PlayerDetails
         parameters:
-        - name: playerNameWithTeamName
+        - name: playerName
           in: path
           description: name for get player's basic details
           required: true
           schema:
             type: string
+        - name: teamName
+          in: path
+          description: name of team 
+          required: true
+          schema:
+            type: string    
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref : '#/components/schemas/Player'
+          '204':
+            description: No Content         
+          '400':
+            description: invalid input
+
+  /Player/basicInfoByPosition/{playerName}/{positionName}:
+    get:
+        tags:
+        - player
+        summary: player by position details show on screen
+        description: all users can watch details
+        # operationId: PlayerDetails
+        parameters:
+        - name: playerName
+          in: path
+          description: name for get player's basic details
+          required: true
+          schema:
+            type: string
+        - name: positionName
+          in: path
+          description: name of position 
+          required: true
+          schema:
+            type: string    
         responses:
           '200':
             description: successful operation
@@ -767,6 +805,8 @@ components:
           description: player weight
           example: 80 kg
 
+
+  
   # uses for represent favorities teams & add new team to favorities       
 
     Team:
