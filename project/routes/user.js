@@ -79,6 +79,14 @@ router.get("/favoriteGames", async (req, res, next) => {
   }
 });
 
+// router.delete("/favoriteGames", async (req, res, next) => {
+//   try {
+//     const user_id = req.session.user_id;
+
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 router.post("/favoriteTeams", async (req, res, next) => {
   try {
@@ -99,7 +107,7 @@ router.get("/favoriteTeams", async (req, res, next) => {
     let team_ids_array = [];
     team_ids.map((element) => team_ids_array.push(element.team_id)); //extracting the teams ids into array
     const results_team = await teams_utils.getTeamsInfo(team_ids_array);
-    res.status(200).send(results);
+    res.status(200).send(results_team);
   } catch (error) {
     next(error);
   }

@@ -57,8 +57,7 @@ paths:
           description: Invalid username/password supplied
         '401':
           description: Authentication failed
-        
-          
+                
   /logout:
     post:
       tags:
@@ -75,13 +74,6 @@ paths:
       summary: all teams show
       description: can only be done by the logged in user.
       operationId: showFavoritiesTeams
-      # parameters: 
-      # - name: FavoritiesTeamsId
-      #   in: query
-      #   description: id for get all favorities teams
-      #   required: true
-      #   schema:
-      #     type: string
       responses:
         '200':
           description: successful operation
@@ -92,8 +84,7 @@ paths:
                 items:
                     $ref : '#/components/schemas/Team'
         '400':
-          description: invalid input
-          
+          description: invalid input 
     post:
       tags:
       - user
@@ -126,13 +117,6 @@ paths:
       summary: return the favorite players were saved by user
       description: can only be done by the logged in user.
       operationId: showFavoritiesPlayers
-      # parameters: 
-      # - name: FavoritiesPlayersId
-      #   in: query
-      #   description: id for get all favorities players
-      #   required: true
-      #   schema:
-      #     type: string
       responses:
         '200':
           description: successful operation
@@ -176,13 +160,6 @@ paths:
       summary: all games show
       description: can only be done by the logged in user.
       operationId: showFavoritiesGamess
-      # parameters: 
-      # - name: FavoritiesGamesId
-      #   in: query
-      #   description: id for get all favorities games
-      #   required: true
-      #   schema:
-      #     type: string
       responses:
         '200':
           description: successful operation
@@ -215,8 +192,7 @@ paths:
         '201':
           description: A new Game has been added to favorities
         '400':
-          description: wrong input parameters         
-    
+          description: wrong input parameters             
     delete:
       tags:
         - user
@@ -241,15 +217,7 @@ paths:
       tags:
       - league
       summary:  league details show on screeen
-      description: all users can watch details
-      # operationId: leagueDetails
-      # parameters:
-      # - name: idLeague
-      #   in: query 
-      #   description: id of league to show
-      #   required: true
-      #   schema:
-      #     type: string     
+      description: all users can watch details     
       responses:
         '200' : 
           description: league details to show
@@ -262,30 +230,30 @@ paths:
         '400':
           description: wrong input parameters
           
-  ##search player        
-  /Player/basicInfo/{playerId}:
-    get:
-      tags:
-      - player
-      summary: player details show on screen
-      description: all users can watch details
-      operationId: PlayerDetails
-      parameters:
-      - name: playerID
-        in: path
-        description: id for get player's basic details
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref : '#/components/schemas/Player'
-        '400':
-          description: invalid input 
+        
+  # /Player/basicInfo/{playerId}:
+  #   get:
+  #     tags:
+  #     - player
+  #     summary: player details show on screen
+  #     description: all users can watch details
+  #     operationId: PlayerDetails
+  #     parameters:
+  #     - name: playerID
+  #       in: path
+  #       description: id for get player's basic details
+  #       required: true
+  #       schema:
+  #         type: string
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref : '#/components/schemas/Player'
+  #       '400':
+  #         description: invalid input 
   
   ##self page of player
   /Player/fullInfo/{playerId}:
@@ -311,7 +279,8 @@ paths:
                 $ref : '#/components/schemas/PlayerFullInfo'
         '400':
           description: invalid input         
- 
+
+##search player
   /Player/basicInfo/{playerName}:
     get:
       tags:
@@ -337,7 +306,7 @@ paths:
           description: No Content         
         '400':
           description: invalid input
-
+## search by player+ team
   /Player/basicInfoByTeam/{playerName}/{teamName}:
     get:
         tags:
@@ -369,7 +338,7 @@ paths:
             description: No Content         
           '400':
             description: invalid input
-
+##search by player and positionName
   /Player/basicInfoByPosition/{playerName}/{positionName}:
     get:
         tags:
@@ -402,18 +371,18 @@ paths:
           '400':
             description: invalid input
 
-  ##search coach
-  # /Coach/basicInfo/{coachID}:
+  ##future game + associat represent do post
+  # /Game/basicInfo/{gameID}:
   #   get:
   #     tags:
-  #     - Coach
-  #     summary: coach details show on screen
+  #     - Game
+  #     summary: game details show on screen
   #     description: all users can watch details
-  #     operationId: CoachDetails
+  #     operationId: GameDetails
   #     parameters:
-  #     - name: coachID
+  #     - name: gameID
   #       in: path
-  #       description: id for get coach's basic details
+  #       description: id for get game's basic details
   #       required: true
   #       schema:
   #         type: string
@@ -423,80 +392,92 @@ paths:
   #         content:
   #           application/json:
   #             schema:
-  #               $ref : '#/components/schemas/Coach'
-  #       '400':
-  #         description: invalid input 
-  
-  # /Coach/fullInfo/{coachID}:
-  #   get:
-  #     tags:
-  #     - Coach
-  #     summary: coach's full details show on screen
-  #     description: all users can watch details
-  #     operationId: CoachFullDetails
-  #     parameters:
-  #     - name: coachID
-  #       in: path
-  #       description: id for get coach's full details
-  #       required: true
-  #       schema:
-  #         type: string
-  #     responses:
-  #       '200':
-  #         description: successful operation
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref : '#/components/schemas/CoachFullInfo'
+  #               type: array
+  #               items:
+  #                 $ref : '#/components/schemas/Game'
   #       '400':
   #         description: invalid input
-  
-  
-  ##future game + associat represent do post
-  /Game/basicInfo/{gameID}:
+  # /Game/basicInfo: 
+  #   get:
+  #     tags:
+  #     - Game
+  #     summary: game details show on screen
+  #     description: all users can watch details
+  #     operationId: GameDetails
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref : '#/components/schemas/Game'
+  #       '400':
+  #         description: invalid input
+
+  ## past game
+  # /Game/fullInfo/{gameID}:
+  #   get:
+  #     tags:
+  #     - Game
+  #     summary: game details show on screen
+  #     description: all users can watch details
+  #     operationId: OldGameDetails
+  #     parameters:
+  #     - name: gameID
+  #       in: path
+  #       description: id for get game's full details
+  #       required: true
+  #       schema:
+  #         type: string
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref : '#/components/schemas/OldGame'
+  #       '400':
+  #         description: invalid input
+
+  /Game/allGame:
     get:
       tags:
       - Game
-      summary: game details show on screen
+      summary: games details show on screen
       description: all users can watch details
-      operationId: GameDetails
-      parameters:
-      - name: gameID
-        in: path
-        description: id for get game's basic details
-        required: true
-        schema:
-          type: string
+      operationId: OldGameDetails
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref : '#/components/schemas/Game'
+                $ref : '#/components/schemas/OldGame'
+        '400':
+          description: invalid input
+  
+  /Game/referee:
+    get: 
+      tags: 
+      - Game
+      summary: all referee in the system
+      operationId: referees
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                refereeNames:
+                  type: string
+                  example: pini gershon
         '400':
           description: invalid input
 
-  /Game/basicInfo: 
-    get:
-      tags:
-      - Game
-      summary: game details show on screen
-      description: all users can watch details
-      operationId: GameDetails
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref : '#/components/schemas/Game'
-        '400':
-          description: invalid input            
+  /League_management/basicInfo:         
     post:
       tags:
+      - League_management
       - Game
       summary: game added to system
       description: can only be done by the association represent.
@@ -513,54 +494,13 @@ paths:
           description: A new Game has been added to system
         '400':
           description: wrong input parameters  
-    
-    
-  
-  ## past game
-  /Game/fullInfo/{gameID}:
-    get:
-      tags:
-      - Game
-      summary: game details show on screen
-      description: all users can watch details
-      operationId: OldGameDetails
-      parameters:
-      - name: gameID
-        in: path
-        description: id for get game's full details
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref : '#/components/schemas/OldGame'
-        '400':
-          description: invalid input
+        '403':
+          description : no appropriate permissions 
 
-  /Game/allGame:
-    get:
-      tags:
-      - Game
-      summary: game details show on screen
-      description: all users can watch details
-      operationId: OldGameDetails
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref : '#/components/schemas/OldGame'
-        '400':
-          description: invalid input
-          
-  /Game/score:
+  /League_management/score:
     post:
       tags:
+      - League_management
       - Game
       summary: score added to specific game
       description: can only be done by the associate represent.
@@ -576,10 +516,13 @@ paths:
           description: score update to game
         '400':
           description: wrong input parameters
+        '403':
+          description : no appropriate permissions 
   
-  /Game/events:
+  /League_management/events:
     post:
       tags:
+      - League_management
       - Game
       summary: events added to specific game
       description: can only be done by the associate represent.
@@ -594,7 +537,9 @@ paths:
         '201':
           description: events update to game
         '400':
-          description: wrong input parameters          
+          description: wrong input parameters
+        '403':
+          description : no appropriate permissions      
           
   #search team
   /Team/basicInfoID/{teamID}:
@@ -673,6 +618,9 @@ paths:
           description: No Content       
         '400':
           description: invalid input
+
+
+
 components:
   schemas: #update
   # represnt user register
