@@ -32,31 +32,28 @@ async function getAllGame(){
     const gameDet = await DButils.execQuery(
         `select game_id, date, time, home_team_name, away_team_name, field_name, goal_home, goal_away, referee from games`
     );
-
     const eventsForGames=  await DButils.execQuery(
         `select game_id, date, time, minute, event_name from games_events`
     );
     for (var i=0; i< gameDet.length; i++){
         // let fullGame = []
         if(gameDet[i].goal_home != null){
-            let gameEvents= getAllEventForGame(eventsForGames, gameDet[i].game_id);
+            let gameEvents= await getAllEventForGame(eventsForGames, gameDet[i].game_id);
             gameDet[i].eventsSchedule = gameEvents;
             allDataToReturn.push(gameDet[i]);
         }
         else{
-            allDataToReturn.push(gameDet[i])
-
-        
+            allDataToReturn.push(gameDet[i]);    
     }}
     return allDataToReturn;
 }
 
 
 // return all the events for spicific game
-function getAllEventForGame(events, gameId){
+async function getAllEventForGame(events, gameId){
     let eventsGame=[]
     for (var i=0; i< events.length; i++){
-        if(events[i].game_id===gameId){
+        if(events[i].game_id === gameId){
             delete events[i].game_id;
             eventsGame.push(events[i])
         }
@@ -64,8 +61,7 @@ function getAllEventForGame(events, gameId){
     // if (events.find((x) => x.game_id === gameId)){
     //     console.log(x) 
     // }
-    return eventsGame
-        
+    return eventsGame     
 }
 //this function get team name and extract from db all games of this team
 async function getAllgameByGroupSortPastFuture(team_name){
@@ -110,9 +106,18 @@ async function getAllEventsByGameID(game_id){
     return all_events;
 }
 
-
+async function getRefereesNames(){
+    const all_referee = await DButils.execQuery(
+        `select referee_name from referee`
+    );
+    return all_referee;
+}
 
 
 exports.getfutureGameInfo= getfutureGameInfo;
 exports.getAllGame=getAllGame;
+
 exports.getAllgameByGroupSortPastFuture = getAllgameByGroupSortPastFuture;
+
+exports.getRefereesNames=getRefereesNames;
+

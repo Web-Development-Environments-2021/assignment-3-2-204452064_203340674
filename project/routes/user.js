@@ -79,6 +79,14 @@ router.get("/favoriteGames", async (req, res, next) => {
   }
 });
 
+// router.delete("/favoriteGames", async (req, res, next) => {
+//   try {
+//     const user_id = req.session.user_id;
+
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 router.post("/favoriteTeams", async (req, res, next) => {
   try {

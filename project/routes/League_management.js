@@ -1,9 +1,17 @@
-const { errorMonitor } = require("events");
 var express = require("express");
 var router = express.Router();
 const DButils = require("../routes/utils/DButils");
 const games_utils = require("./utils/game_utils");
 
+
+router.use(function (req, res, next) {
+     if (req.session.user_id === '6') { 
+      next();
+    }
+    else {
+      res.status(403).send("no appropriate permissions");
+  }
+});
 
 //insert new game to the database
 router.post("/basicInfo", async (req, res, next) => { 
@@ -38,17 +46,12 @@ router.post("/basicInfo", async (req, res, next) => {
     }
   });
 
-
-
   router.post("/score", async (req, res, next) =>{
     try {
-      const games = await DButils.execQuery(`SELECT * FROM dbo.games where game_id='${req.body.game_id}'`);
-      if (games.length!= 0){
-        await DButils.execQuery(
-        `UPDATE dbo.games set goal_home='${req.body.goal_home}', goal_away='${req.body.goal_away}' where game_id='${req.body.game_id}'` 
-      );
-        res.status(201).send("score added to the game");}
-        else{res.status(400).send("this game id doesnt exist");}
+      await DButils.execQuery(
+      `UPDATE dbo.games set goal_home='${req.body.goal_home}', goal_away='${req.body.goal_away}' where game_id='${req.body.game_id}'` 
+    );
+      res.status(201).send("score added to the game");
     } catch (error) {
       next(error)
     }
@@ -67,25 +70,4 @@ router.post("/basicInfo", async (req, res, next) => {
     }
   })
 
-
-router.get("/allGame", async (req, res, next) =>{
-  try {
-    let game_ids_array = [];
-    const results_game = await games_utils.getAllGame(game_ids_array);
-    res.status(200).send(results_game);
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get("/referee", async (req, res, next) =>{
-  try {
-    const allreferee= await games_utils.getRefereesNames();
-    res.send(allreferee);
-  } catch (error) {
-    next(error)
-  }
-})
-
-  
   module.exports = router;
