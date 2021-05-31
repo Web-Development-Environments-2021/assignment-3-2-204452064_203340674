@@ -53,6 +53,7 @@ const league = require("./routes/league");
 const teams= require("./routes/Team");
 const Game = require("./routes/Game");
 const players = require("./routes/Player");
+const League_management = require("./routes/League_management");
 
 //#endregion
 
@@ -82,6 +83,7 @@ app.use("/league", league);
 app.use("/team", teams);
 app.use("/Game", Game);
 app.use("/Player", players)
+app.use("/League_management", League_management)
 app.use(auth);
 
 
