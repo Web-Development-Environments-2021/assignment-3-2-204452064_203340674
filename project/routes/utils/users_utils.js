@@ -27,9 +27,15 @@ async function getFavoriteGame(user_id) {
 }
 
 async function markTeamAsFavorite(user_id, team_id) {
+  // try{
   await DButils.execQuery(
     `insert into users_favorites_teams values ('${user_id}',${team_id})`
   );
+// }
+  // catch(error){ 
+  //   next(error);
+
+  // }
 }
 
 async function getFavoriteTeam(user_id) {

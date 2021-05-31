@@ -20,8 +20,8 @@ paths:
       responses:
         '201':
           description: A new user has been added
-        '400':
-          description: wrong input parameters
+        '409':
+          description: user name already exist
           
   /login:
     post:
@@ -106,6 +106,8 @@ paths:
       responses:
         '201':
           description: A new team has been added to favorities
+        '409':
+          description: this team is aleady exist in yours favorites  
         '400':
           description: wrong input parameters
           

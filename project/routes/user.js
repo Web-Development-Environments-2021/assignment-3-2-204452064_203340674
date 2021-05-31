@@ -95,6 +95,7 @@ router.post("/favoriteTeams", async (req, res, next) => {
     await users_utils.markTeamAsFavorite(user_id, team_id);
     res.status(201).send("The team successfully saved as favorite");
   } catch (error) {
+    //error.message = "this team already exist in your favorites"
     next(error);
   }
 });
