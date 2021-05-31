@@ -2,6 +2,7 @@ const axios = require("axios");
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 // const TEAM_ID = "85";
 
+//this function get team_id and return list of player's id
 async function getPlayerIdsByTeam(team_id) {
   let player_ids_list = [];
   const team = await axios.get(`${api_domain}/teams/${team_id}`, {
@@ -16,6 +17,7 @@ async function getPlayerIdsByTeam(team_id) {
   return player_ids_list;
 }
 
+//this function get list of player's id and call to extract all relevant data of all players
 async function getPlayersInfo(players_ids_list) {
   let promises = [];
   players_ids_list.map((id) =>
@@ -31,7 +33,7 @@ async function getPlayersInfo(players_ids_list) {
   let players_info = await Promise.all(promises);
   return extractRelevantPlayerData(players_info);
 }
-//use when search name of player. supply preview of all players with same name:
+//use when user search name of player. supply preview of all players with same name:
 async function getPlayerbasicDetailsByName(player_name){
   
   const all_player_with_same_name = await axios.get(`${api_domain}/players/search/${player_name}`, {
@@ -43,7 +45,7 @@ async function getPlayerbasicDetailsByName(player_name){
     return all_player_with_same_name.data.data.map((player_info) => {
       if(player_info != undefined)
       {
-        const { fullname, image_path, position_id } = player_info;
+        const { player_id, fullname, image_path, position_id } = player_info;
         if( player_info.team != undefined)
         {
           const { name } = player_info.team.data;
@@ -53,6 +55,7 @@ async function getPlayerbasicDetailsByName(player_name){
             if(id == 271) 
             {
               return {
+                  id: player_id,
                   name: fullname,
                   image: image_path,
                   position: position_id,
@@ -66,11 +69,7 @@ async function getPlayerbasicDetailsByName(player_name){
     }); 
   }
 
-
-    
-
 //get player full info for self page
-
 async function getPlayerfullDetails(player_id){
   const player_info = await axios.get(`${api_domain}/players/${player_id}`, {
     params: {
@@ -95,28 +94,31 @@ async function getPlayerfullDetails(player_id){
     
   };
 }
-
+//this function get list of players info and extract specific fields 
 function extractRelevantPlayerData(players_info) {
   return players_info.map((player_info) => {
-    const { fullname, image_path, position_id } = player_info.data.data;
+    if (player_info.data.data != undefined){
+    
+    const { player_id ,fullname, image_path, position_id } = player_info.data.data;
     const { name } = player_info.data.data.team.data;
     const { length } = player_info.data.data.trophies.data;
     return {
+      id: player_id,
       name: fullname,
       image: image_path,
       position: position_id,
       team_name: name,
       number_of_trophies: length,};
 
-  });
+  }});
 }
-
+//this function get team_id and return all info about team's players
 async function getPlayersByTeam(team_id) {
   let player_ids_list = await getPlayerIdsByTeam(team_id);
   let players_info = await getPlayersInfo(player_ids_list);
   return players_info;
 }
-
+//this function get player name and team name and return info of player that have specific name and associated to specific team
 async function getPlayerbasicDetailsByTeam(player_name, team_name){
   const all_player_with_same_name = await axios.get(`${api_domain}/players/search/${player_name}`, {
     params: {
@@ -127,7 +129,7 @@ async function getPlayerbasicDetailsByTeam(player_name, team_name){
     return all_player_with_same_name.data.data.map((player_info) => {
       if(player_info != undefined && player_info.team != undefined)
       {
-        const { fullname, image_path, position_id } = player_info;
+        const { player_id, fullname, image_path, position_id } = player_info;
         if( player_info.team.data.name == team_name)
         {
           const { name } = player_info.team.data;
@@ -137,6 +139,7 @@ async function getPlayerbasicDetailsByTeam(player_name, team_name){
             if(id == 271) 
             {
               return {
+                  id: player_id,
                   name: fullname,
                   image: image_path,
                   position: position_id,
@@ -149,6 +152,7 @@ async function getPlayerbasicDetailsByTeam(player_name, team_name){
       
     }); 
   }
+  //this function get player name and team name and return info of player that have specific name and associated to specific team
   async function getPlayerbasicDetailsByPosition(player_name, position_name){
     const all_player_with_same_name = await axios.get(`${api_domain}/players/search/${player_name}`, {
       params: {
@@ -159,7 +163,7 @@ async function getPlayerbasicDetailsByTeam(player_name, team_name){
       return all_player_with_same_name.data.data.map((player_info) => {
         if(player_info != undefined && player_info.team != undefined && player_info.position != undefined)
         {
-          const { fullname, image_path, position_id } = player_info;
+          const { player_id, fullname, image_path, position_id } = player_info;
           if( player_info.position.data.name == position_name)
           {
             const { name } = player_info.team.data;
@@ -169,6 +173,7 @@ async function getPlayerbasicDetailsByTeam(player_name, team_name){
               if(id == 271) 
               {
                 return {
+                    id: player_id,
                     name: fullname,
                     image: image_path,
                     position: position_id,

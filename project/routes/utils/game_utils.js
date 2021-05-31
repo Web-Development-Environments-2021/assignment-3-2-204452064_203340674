@@ -51,6 +51,7 @@ async function getAllGame(){
     return allDataToReturn;
 }
 
+
 // return all the events for spicific game
 function getAllEventForGame(events, gameId){
     let eventsGame=[]
@@ -66,9 +67,52 @@ function getAllEventForGame(events, gameId){
     return eventsGame
         
 }
+//this function get team name and extract from db all games of this team
+async function getAllgameByGroupSortPastFuture(team_name){
+    const allGames = await DButils.execQuery(
+        `select * from games where home_team_name ='${team_name}' or away_team_name = '${team_name}'` 
+    );
+    return(splitPastFutureGame(allGames));
+    
+
+}
+//this function get games and split by date between past and future
+function splitPastFutureGame(allGames){
+    let pastGames = [];
+    let futureGames = [];
+    let allEvents =[];
+    let today = new Date();
+    for (let i = 0; i < allGames.length; i++){
+        if (allGames[i].date > today){
+            futureGames.push(allGames[i])
+        }
+        else{
+            allEvents = getAllEventsByGameID(allGames[i].game_id);
+            
+            allGames[i].events = allEvents;
+
+            pastGames.push(allGames[i])
+        }
+    }
+    return [pastGames, futureGames]
+
+}
+//this function extract every event by specific game
+async function getAllEventsByGameID(game_id){
+    const eventsForGame=  await DButils.execQuery(`select date, time, minute, event_name from games_events where game_id='${game_id}'`    
+    );
+    let all_events = [];
+    for (let i = 0; i < eventsForGame.length; i++)
+    {
+        all_events.push(eventsForGame[i]);
+    }
+    console.log(all_events);
+    return all_events;
+}
 
 
 
 
 exports.getfutureGameInfo= getfutureGameInfo;
 exports.getAllGame=getAllGame;
+exports.getAllgameByGroupSortPastFuture = getAllgameByGroupSortPastFuture;

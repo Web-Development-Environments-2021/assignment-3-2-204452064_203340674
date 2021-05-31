@@ -51,10 +51,13 @@ router.post("/basicInfo", async (req, res, next) => {
 
   router.post("/score", async (req, res, next) =>{
     try {
-      await DButils.execQuery(
-      `UPDATE dbo.games set goal_home='${req.body.goal_home}', goal_away='${req.body.goal_away}' where game_id='${req.body.game_id}'` 
-    );
-      res.status(201).send("score added to the game");
+      const games = await DButils.execQuery(`SELECT * FROM dbo.games where game_id='${req.body.game_id}'`);
+      if (games.length!= 0){
+        await DButils.execQuery(
+        `UPDATE dbo.games set goal_home='${req.body.goal_home}', goal_away='${req.body.goal_away}' where game_id='${req.body.game_id}'` 
+      );
+        res.status(201).send("score added to the game");}
+        else{res.status(400).send("this game id doesnt exist");}
     } catch (error) {
       next(error)
     }

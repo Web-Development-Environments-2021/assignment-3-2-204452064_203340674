@@ -87,6 +87,7 @@ router.post("/favoriteTeams", async (req, res, next) => {
     await users_utils.markTeamAsFavorite(user_id, team_id);
     res.status(201).send("The team successfully saved as favorite");
   } catch (error) {
+    //error.message = "this team already exist in your favorites"
     next(error);
   }
 });
@@ -99,7 +100,7 @@ router.get("/favoriteTeams", async (req, res, next) => {
     let team_ids_array = [];
     team_ids.map((element) => team_ids_array.push(element.team_id)); //extracting the teams ids into array
     const results_team = await teams_utils.getTeamsInfo(team_ids_array);
-    res.status(200).send(results);
+    res.status(200).send(results_team);
   } catch (error) {
     next(error);
   }
