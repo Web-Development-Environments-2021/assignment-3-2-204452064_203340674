@@ -24,17 +24,9 @@ async function getSpicificGameInfo(game_id){
 
 // return all the game, past and future
 async function getAllGame(){
-    // const games = await DButils.execQuery(`select games.date, games.time, games.home_team_name, games.away_team_name, games.field_name, 
-    // games.goal_home, games.goal_away, games.referee, games_events.date, games_events.time, games_events.minute, games_events.event_name from games, games_events
-    // where games.game_id=games_events.game_id
-    // group by games.game_id`)
     let allDataToReturn = []
-    const gameDet = await DButils.execQuery(
-        `select game_id, date, time, home_team_name, away_team_name, field_name, goal_home, goal_away, referee from games`
-    );
-    const eventsForGames=  await DButils.execQuery(
-        `select game_id, date, time, minute, event_name from games_events`
-    );
+    const gameDet = await GameFromDB();
+    const eventsForGames=  await getAllEvents();
     for (var i=0; i< gameDet.length; i++){
         // let fullGame = []
         if(gameDet[i].goal_home != null){
@@ -48,6 +40,19 @@ async function getAllGame(){
     return allDataToReturn;
 }
 
+async function GameFromDB(){
+    const gameDet = await DButils.execQuery(
+        `select game_id, date, time, home_team_name, away_team_name, field_name, goal_home, goal_away, referee from games`
+    );
+    return gameDet;
+}
+
+async function getAllEvents(){
+    const eventsForGames=  await DButils.execQuery(
+        `select game_id, date, time, minute, event_name from games_events`
+    );
+    return eventsForGames;
+}
 // return all the events for spicific game
 async function getAllEventForGame(events, gameId){
     let eventsGame=[]
