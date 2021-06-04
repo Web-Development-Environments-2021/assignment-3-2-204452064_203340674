@@ -50,7 +50,7 @@ async function getPlayerbasicDetailsByName(player_name){
         {
           const { name } = player_info.team.data;
           if(player_info.team.data.league != undefined)
-          {S
+          {
             const {id} = player_info.team.data.league.data;
             if(id == 271) 
             {
