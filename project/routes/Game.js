@@ -25,7 +25,7 @@ router.get("/referee", async (req, res, next) =>{
 
 router.get("/field", async (req, res,next) =>{
   try{
-    const allFields = await games_utills.getFieldsNames();
+    const allFields = await games_utils.getFieldsNames();
     res.send(allFields); 
   }catch(error){
     next(error)

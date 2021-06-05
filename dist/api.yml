@@ -172,7 +172,10 @@ paths:
                 items:
                     $ref : '#/components/schemas/Game'
         '400':
-          description: invalid input 
+          description: invalid input
+        '409':
+          description: no favorites games in future
+
     post:
       tags:
       - user

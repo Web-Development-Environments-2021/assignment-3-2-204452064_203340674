@@ -3,14 +3,22 @@ const DButils = require("./DButils");
 
 //get info of all future game in the list, 
 async function getfutureGameInfo(game_id_list){
+    
     let list_game_info=[];
+    let today = new Date();
     for (var i=0; i< game_id_list.length; i++){
         let game = await getSpicificGameInfo(game_id_list[i]);
-        list_game_info.push(game);
+        if(game[0].date > today)
+        {
+            list_game_info.push(game);
+        }
     }
     // game_id_list.map((game_id)=>
     // list_game_info.push(await getGameInfo(game_id)
     //   ));
+    if(list_game_info.length<1){
+        throw{status:409, message:"your favorites games is empty"}
+    }
     return list_game_info;
 }
 
@@ -166,11 +174,6 @@ async function insertNewGame(game_info){
         insertNewGameToDB(game_info);
         return "game created"
     }
-    
-      
-
-
-
 }
 async function insertNewGameToDB(game_info){
     await DButils.execQuery(
@@ -181,8 +184,7 @@ async function insertNewGameToDB(game_info){
 
 exports.getfutureGameInfo= getfutureGameInfo;
 exports.getAllGame=getAllGame;
-
 exports.getAllgameByGroupSortPastFuture = getAllgameByGroupSortPastFuture;
 exports.insertNewGame = insertNewGame;
 exports.getRefereesNames=getRefereesNames;
-
+exports.getFieldsNames=getFieldsNames;
