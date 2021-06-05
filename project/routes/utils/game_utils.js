@@ -52,7 +52,7 @@ async function GameFromDB(){
 
 async function getAllEvents(){
     const eventsForGames=  await DButils.execQuery(
-        `select game_id, date, time, minute, event_name from games_events`
+        `select game_id, date, time, minute, event_name, player_id_1, player_id_2 from games_events`
     );
     return eventsForGames;
 }
@@ -120,6 +120,11 @@ async function getRefereesNames(){
     );
     return all_referee;
 }
+//get all fields in db
+async function getFieldsNames(){
+    const all_fields = await DButils.execQuery(`select field_name from fields`);
+    return all_fields;
+}
 //this function check if game date is free for two teams return message
 async function checkIfTeamsFree(allGames, gameDate, home, away){
     if (allGames.find((game_info)=>game_info.date.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10) === gameDate && 
@@ -143,16 +148,19 @@ async function insertNewGame(game_info){
     const gameDate = game_info.date;
     let today = new Date().toISOString().replace(/T/, ' ').slice(0,10);
     if (gameDate < today){
-        return "you must insert a update date"
+        //return "you must insert a update date"
+        throw{status:409, message:"you must insert a update date" }
     }
     const allGames = await GameFromDB();
     const messTeam = await checkIfTeamsFree(allGames, gameDate, game_info.home_team_name, game_info.away_team_name);     
     const messField = await checkIfFieldFree(allGames, gameDate, game_info.field_name);
     if (messTeam != null){
-        return messTeam
+        //return messTeam
+        throw{status:409, message: messTeam}
     }
     if (messField != null){
-        return messField
+        //return messField
+        throw{status:409, message: messField}
     }
     else{
         insertNewGameToDB(game_info);
