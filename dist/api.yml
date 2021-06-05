@@ -492,6 +492,23 @@ paths:
                   example: pini gershon
         '400':
           description: invalid input
+  /Game/field:
+    get: 
+      tags: 
+      - Game
+      summary: all fields in the system
+      operationId: fields
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                refereeNames:
+                  type: string
+                  example: Lyngby Stadion
+        '400':
+          description: invalid input        
 
   /League_management/basicInfo:         
     post:

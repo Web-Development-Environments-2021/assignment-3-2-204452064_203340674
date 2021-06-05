@@ -49,6 +49,14 @@ router.get("/referee", async (req, res, next) =>{
     next(error)
   }
 })
+router.get("/field", async (req, res,next) =>{
+  try{
+    const allFields = await games_utills.getFieldsNames();
+    res.send(allFields); 
+  }catch(error){
+    next(error)
+  }
+})
 
   
   module.exports = router;
