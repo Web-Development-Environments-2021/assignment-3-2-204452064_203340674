@@ -232,8 +232,25 @@ paths:
         '400':
           description: wrong input parameters
           
-        
-  # /Player/basicInfo/{playerId}:
+  /league/searchAll:
+    get:
+      tags:
+      - league
+      summary:  teams, players, positions names show on screeen
+      description: the names users can search     
+      responses:
+        '200' : 
+          description: names of items show
+          content:
+            application/json:
+              schema:
+                type: array   
+                items:
+                  $ref: '#/components/schemas/searchItems'
+        '400':
+          description: wrong input parameters
+
+# /Player/basicInfo/{playerId}:
   #   get:
   #     tags:
   #     - player
@@ -373,7 +390,7 @@ paths:
           '400':
             description: invalid input
 
-  ##future game + associat represent do post
+##future game + associat represent do post
   # /Game/basicInfo/{gameID}:
   #   get:
   #     tags:
@@ -755,6 +772,21 @@ components:
           description: player weight
           example: 80 kg
 
+    searchPosition:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: int
+          description: id number of position
+          example: 3
+        name:
+          type: string
+          description: name of the position
+          example: "Midfielder"
+
   # uses for represent favorities teams & add new team to favorities       
     Team:
       type: object
@@ -941,6 +973,31 @@ components:
           example: Championship round
         nextgamedetails:
           $ref: '#/components/schemas/Game'
+    searchItems:
+      type: object
+      # required:
+      #   - leaguename
+      #   - season
+      #   - stage
+      #   - nextgamedetails
+      properties:
+        teams:
+          type: array
+          description : all teams in league
+          items:
+            type: string
+        players:
+          type: array
+          description: all players in league
+          items:
+            type: string
+        positions:
+          type: array
+          description: all positions options
+          items:
+            type: string
+            
+             
           
     # Coach:
     #   type: object

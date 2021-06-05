@@ -11,5 +11,12 @@ router.get("/leagueDetails", async (req, res, next) => {
     next(error);
   }
 });
-
+router.get("/searchAll", async (req, res, next) => {
+  try {
+    const allData = await league_utils.getAllData(17328);
+    res.send(allData);
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = router;

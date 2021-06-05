@@ -2,7 +2,7 @@ const axios = require("axios");
 const LEAGUE_ID = 271;
 // our addition for next game query
 const DButils = require("./DButils");
-// current_date = new Date();
+const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 
 async function getLeagueDetails() {
   const league = await axios.get(
@@ -14,14 +14,19 @@ async function getLeagueDetails() {
       },
     }
   );
-  const stage = await axios.get(
-    `https://soccer.sportmonks.com/api/v2.0/stages/${league.data.data.current_stage_id}`,
-    {
-      params: {
-        api_token: process.env.api_token,
-      },
-    }
-  );
+  // try{
+  // const stage = await axios.get(
+  //   `https://soccer.sportmonks.com/api/v2.0/stages/${league.data.data.current_stage_id}`,
+  //   {
+  //     params: {
+  //       api_token: process.env.api_token,
+  //     },
+  //   }
+  // );}
+  // catch(error){
+  //   throw{status:404, message:"stage error"}
+
+  // }
   const next_game = (await DButils.execQuery( `SELECT date, time, home_team_name, away_team_name, field_name, referee FROM dbo.games WHERE date=(SELECT MAX(date) From dbo.games)`))
   const date = next_game[0].date.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10);
   const time = next_game[0].time.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(10,20);
@@ -33,7 +38,7 @@ async function getLeagueDetails() {
   return {
     league_name: league.data.data.name,
     current_season_name: league.data.data.season.data.name,
-    current_stage_name: stage.data.data.name,
+    //current_stage_name: stage.data.data.name,
     // next game details should come from DB
     next_game_date : date,
     next_game_time : time,
@@ -43,4 +48,31 @@ async function getLeagueDetails() {
     next_game_referee : referee,
   };
 }
+async function getAllData(season_id){
+  const leagueTeams = await axios.get(`${api_domain}/teams/season/${season_id}`,{
+    params: {
+      include: "squad.player.position",
+      api_token: process.env.api_token,
+    },
+  });
+  let allTeams = [];
+  let allPlayers = [];
+  let allPositions = new Set();
+  leagueTeams.data.data.map((team_info)=>{
+    allTeams.push(team_info.name);
+    allPlayers = allPlayers.concat(team_info.squad.data.map((player_info)=>{
+      allPositions.add(player_info.player.data.position.data.name);
+      return player_info.player.data.display_name;
+    }))
+  });
+  return{
+    teams: allTeams,
+    players: allPlayers,
+    positions: Array.from(allPositions),
+
+  }
+
+
+}
 exports.getLeagueDetails = getLeagueDetails;
+exports.getAllData = getAllData;
