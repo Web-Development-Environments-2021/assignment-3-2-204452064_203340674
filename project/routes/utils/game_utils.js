@@ -24,20 +24,23 @@ async function getSpicificGameInfo(game_id){
 
 // return all the game, past and future
 async function getAllGame(){
-    let allDataToReturn = []
+    let allGameToReturn = {}
+    let futureGames = []
+    let fastGame = []
     const gameDet = await GameFromDB();
     const eventsForGames=  await getAllEvents();
     for (var i=0; i< gameDet.length; i++){
-        // let fullGame = []
         if(gameDet[i].goal_home != null){
-            let gameEvents= await getAllEventForGame(eventsForGames, gameDet[i].game_id);
+            let gameEvents = await getAllEventForGame(eventsForGames, gameDet[i].game_id);
             gameDet[i].eventsSchedule = gameEvents;
-            allDataToReturn.push(gameDet[i]);
+            fastGame.push(gameDet[i]);
         }
         else{
-            allDataToReturn.push(gameDet[i]);    
+            futureGames.push(gameDet[i]);    
     }}
-    return allDataToReturn;
+    allGameToReturn.fastGame = fastGame;
+    allGameToReturn.futureGames = futureGames;  
+    return allGameToReturn;
 }
 
 async function GameFromDB(){
