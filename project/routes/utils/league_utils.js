@@ -27,7 +27,8 @@ async function getLeagueDetails() {
   //   throw{status:404, message:"stage error"}
 
   // }
-  const next_game = (await DButils.execQuery( `SELECT date, time, home_team_name, away_team_name, field_name, referee FROM dbo.games WHERE date=(SELECT MAX(date) From dbo.games)`))
+  let today = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10);
+  const next_game = (await DButils.execQuery( `SELECT TOP 1 date, time, home_team_name, away_team_name, field_name, referee  FROM dbo.games WHERE date>'${today}' ORDER BY date ASC`))
   const date = next_game[0].date.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10);
   const time = next_game[0].time.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(10,20);
   const home = next_game[0].home_team_name;
