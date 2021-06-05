@@ -6,26 +6,41 @@ async function markPlayerAsFavorite(user_id, player_id) {
     `insert into users_favorites_players values ('${user_id}',${player_id})`
   );
 }
-
+//return all favourite players of specific user
 async function getFavoritePlayers(user_id) {
   const player_ids = await DButils.execQuery(
     `select player_id from users_favorites_players where user_id='${user_id}'`
   );
   return player_ids;
 }
+//post - fav games check update date and if not exist already
 async function markGameAsFavorite(user_id, game_id) {
-  await DButils.execQuery(
-    `insert into users_favorites_games values ('${user_id}',${game_id})`
-  );
+  const game_date_in_future = await checkGameDateInFuture(game_id);
+  const gameNotInFav = await GameNotExistInFav(user_id, game_id);
+  if(game_date_in_future){
+    if(gameNotInFav){
+      await DButils.execQuery(
+    `insert into users_favorites_games values ('${user_id}',${game_id})`);
+    return;
+    
+        
+    }
+    throw{status:400, message:"this game id is already exist in your favorites list" }
+    
+    
+  }
+  throw{status:400, message:"date must be a future date" }
+  
+  
 }
-
+//return all favourite games of specific user
 async function getFavoriteGame(user_id) {
   const game_ids = await DButils.execQuery(
     `select game_id from users_favorites_games where user_id='${user_id}'`
   );
   return game_ids;
 }
-
+//add team to favo teams of specific user
 async function markTeamAsFavorite(user_id, team_id) {
   // try{
   await DButils.execQuery(
@@ -37,12 +52,33 @@ async function markTeamAsFavorite(user_id, team_id) {
 
   // }
 }
-
+//return all teams fav of a user
 async function getFavoriteTeam(user_id) {
   const team_ids = await DButils.execQuery(
     `select team_id from users_favorites_teams where user_id='${user_id}'`
   );
   return team_ids;
+}
+
+async function checkGameDateInFuture(game_id){
+  // get the date of game 
+  const game_date = await DButils.execQuery( `select date from games where game_id ='${game_id}'`)
+  let today = new Date().toISOString().replace(/T/, ' ').slice(0,10);
+  const game_date_tocompre = game_date[0].date.toISOString().replace(/T/, ' ').slice(0,10);
+  if (game_date_tocompre < today){ // date not update
+    return false;
+  }
+  return true;
+}
+//this function check if game id not exist in user favorites games
+async function GameNotExistInFav(user_id, game_id){
+  const allFav = await getFavoriteGame(user_id);
+  for (let fav = 0; fav < allFav.length; fav++) {
+    if(allFav[fav].game_id == game_id){
+      return false;
+    }
+  }
+  return true;
 }
 
 exports.markPlayerAsFavorite = markPlayerAsFavorite;
