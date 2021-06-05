@@ -68,48 +68,48 @@ async function getAllEventForGame(events, gameId){
     // }
     return eventsGame     
 }
-//this function get team name and extract from db all games of this team
+//this function get team name and extract relevants info of games
 async function getAllgameByGroupSortPastFuture(team_name){
+    const allGamesByTeam = await getAllGameFromDbByTeam(team_name);
+    return splitPastFutureGame(allGamesByTeam);
+}
+//this function get team name and return all games from db
+async function getAllGameFromDbByTeam(team_name){
     const allGames = await DButils.execQuery(
         `select * from games where home_team_name ='${team_name}' or away_team_name = '${team_name}'` 
     );
-    return(splitPastFutureGame(allGames));
-    
+    return allGames;
 
 }
+
 //this function get games and split by date between past and future
-function splitPastFutureGame(allGames){
+async function splitPastFutureGame(allGames){
     let pastGames = [];
     let futureGames = [];
-    let allEvents =[];
     let today = new Date();
+    const eventsForGames=  await getAllEvents();
     for (let i = 0; i < allGames.length; i++){
         if (allGames[i].date > today){
             futureGames.push(allGames[i])
         }
         else{
-            allEvents = getAllEventsByGameID(allGames[i].game_id);
-            
-            allGames[i].events = allEvents;
-
+            //const eventsForGames = await getAllEventsByGameID(allGames[i].game_id);
+            let gameEvents = await getAllEventForGame(eventsForGames,allGames[i].game_id);
+            allGames[i].eventsSchedule = gameEvents;
             pastGames.push(allGames[i])
         }
+        
     }
     return [pastGames, futureGames]
 
 }
-//this function extract every event by specific game
-async function getAllEventsByGameID(game_id){
-    const eventsForGame=  await DButils.execQuery(`select date, time, minute, event_name from games_events where game_id='${game_id}'`    
-    );
-    let all_events = [];
-    for (let i = 0; i < eventsForGame.length; i++)
-    {
-        all_events.push(eventsForGame[i]);
-    }
-    console.log(all_events);
-    return all_events;
-}
+//this function extract every event by specific game from DB
+// async function getAllEventsByGameID(game_id){
+//     const eventsForGame=  await DButils.execQuery(`select game_id, date, time, minute, event_name from games_events where game_id='${game_id}'`    
+//     );
+//     return eventsForGame;
+// }
+
 
 async function getRefereesNames(){
     const all_referee = await DButils.execQuery(
@@ -117,12 +117,61 @@ async function getRefereesNames(){
     );
     return all_referee;
 }
+//this function check if game date is free for two teams return message
+async function checkIfTeamsFree(allGames, gameDate, home, away){
+    if (allGames.find((game_info)=>game_info.date.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10) === gameDate && 
+    (game_info.home_team_name === home || game_info.away_team_name === home)))
+        {return "home team has a game in this date"; }
+    if(allGames.find((game_info)=>game_info.date.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10) === gameDate &&
+    (game_info.home_team_name === away || game_info.away_team_name === away)))  
+        {return "away team has a game in this date";}  
+    else
+        {return null;}    
+}
+async function checkIfFieldFree(allGames, gameDate, field){
+    if (allGames.find((game_info) => game_info.date.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10) === gameDate && 
+  (game_info.field_name === field)))
+      { return "this field is not free";}
+    else{return null}
 
+}
+
+async function insertNewGame(game_info){
+    const gameDate = game_info.date;
+    let today = new Date().toISOString().replace(/T/, ' ').slice(0,10);
+    if (gameDate < today){
+        return "you must insert a update date"
+    }
+    const allGames = await GameFromDB();
+    const messTeam = await checkIfTeamsFree(allGames, gameDate, game_info.home_team_name, game_info.away_team_name);     
+    const messField = await checkIfFieldFree(allGames, gameDate, game_info.field_name);
+    if (messTeam != null){
+        return messTeam
+    }
+    if (messField != null){
+        return messField
+    }
+    else{
+        insertNewGameToDB(game_info);
+        return "game created"
+    }
+    
+      
+
+
+
+}
+async function insertNewGameToDB(game_info){
+    await DButils.execQuery(
+        `INSERT INTO dbo.games (date, time, home_team_name, away_team_name, field_name, referee) VALUES ('${game_info.date}', '${game_info.time}', '${game_info.home_team_name}'
+        , '${game_info.away_team_name}', '${game_info.field_name}', '${game_info.referee}')`
+      );
+}
 
 exports.getfutureGameInfo= getfutureGameInfo;
 exports.getAllGame=getAllGame;
 
 exports.getAllgameByGroupSortPastFuture = getAllgameByGroupSortPastFuture;
-
+exports.insertNewGame = insertNewGame;
 exports.getRefereesNames=getRefereesNames;
 

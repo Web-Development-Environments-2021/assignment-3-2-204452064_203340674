@@ -13,18 +13,8 @@ router.get("/fullInfo/:teamID", async (req, res, next) => {
     team_details.name = team_name_logo_coach.name;
     team_details.image = team_name_logo_coach.image;
     team_details.coach = team_name_logo_coach.coach;
-    //team_details.push(team_name_logo_coach);
-    ////players of team include names,pic,number of thripies
     const team_players_details = await players_utils.getPlayersByTeam(req.params.teamID);
     team_details.players = team_players_details;
-    //team_details.push(team_players_details);
-    
-    //teams coach
-    //const coach = await teams_utils.getCoach(req.params.teamID)
-    //team_details.push(coach);
-    
-    //team_past_games
-
     let games = await games_utils.getAllgameByGroupSortPastFuture(team_name_logo_coach.name);
     team_details.past_games = games[0];
     team_details.future_games = games[1];
