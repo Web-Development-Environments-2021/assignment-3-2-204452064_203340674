@@ -390,74 +390,6 @@ paths:
           '400':
             description: invalid input
 
-##future game + associat represent do post
-  # /Game/basicInfo/{gameID}:
-  #   get:
-  #     tags:
-  #     - Game
-  #     summary: game details show on screen
-  #     description: all users can watch details
-  #     operationId: GameDetails
-  #     parameters:
-  #     - name: gameID
-  #       in: path
-  #       description: id for get game's basic details
-  #       required: true
-  #       schema:
-  #         type: string
-  #     responses:
-  #       '200':
-  #         description: successful operation
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: array
-  #               items:
-  #                 $ref : '#/components/schemas/Game'
-  #       '400':
-  #         description: invalid input
-  # /Game/basicInfo: 
-  #   get:
-  #     tags:
-  #     - Game
-  #     summary: game details show on screen
-  #     description: all users can watch details
-  #     operationId: GameDetails
-  #     responses:
-  #       '200':
-  #         description: successful operation
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref : '#/components/schemas/Game'
-  #       '400':
-  #         description: invalid input
-
-  ## past game
-  # /Game/fullInfo/{gameID}:
-  #   get:
-  #     tags:
-  #     - Game
-  #     summary: game details show on screen
-  #     description: all users can watch details
-  #     operationId: OldGameDetails
-  #     parameters:
-  #     - name: gameID
-  #       in: path
-  #       description: id for get game's full details
-  #       required: true
-  #       schema:
-  #         type: string
-  #     responses:
-  #       '200':
-  #         description: successful operation
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref : '#/components/schemas/OldGame'
-  #       '400':
-  #         description: invalid input
-
   /Game/allGame:
     get:
       tags:
@@ -471,7 +403,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref : '#/components/schemas/OldGame'
+                $ref : '#/components/schemas/allGame'
         '400':
           description: invalid input
   
@@ -654,8 +586,6 @@ paths:
           description: No Content       
         '400':
           description: invalid input
-
-
 
 components:
   schemas: #update
@@ -853,43 +783,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Game'
-          
-# uses for represent favorities players  & basic information         
-    
-          
-    # PlayerCreation:
-    #   type: object
-    #   # required:
-    #   #   - playerID
-    #   #   - playername
-    #   #   - plyerPic
-    #   #   - supergoalBook
-    #   properties:
-    #     # playerID:
-    #     #   type: string
-    #     #   description: id number
-    #     #   example: '65656'
-    #     playername:
-    #       type: string
-    #       description: fullname of player
-    #       example: leo messi
-    #     playerPic:
-    #       type: string
-    #       format: URL
-    #       description: URL for the player Pic
-    #       example: https://cloudinary.com/messi  
-    #     supergoalBook:
-    #       type: string
+    allGame:
+      type: object
+      properties:
+        lastGames:
+          type: array
+          items: '#/components/schemas/OldGame'
+        futureGame:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Game'
+        
 
 # uses for represent favorities game & for next game in league items          
     Game:
       type: object
-      # required:
-      #   - gameDate
-      #   - gameTime
-      #   - homeTeam
-      #   - awayTeam
-      #   - field
       properties:
         date:
           type: string
@@ -913,7 +821,6 @@ components:
         referee:
           type: string
           example: pini 
-
     OldGame:
       type: object
       # required:
@@ -1013,45 +920,6 @@ components:
           description: all positions options
           items:
             type: string
-            
-             
-          
-    # Coach:
-    #   type: object
-    #   required:
-    #     - coachID
-    #     - coachname
-    #     - teamname
-    #     - coachPic
-    #   properties:
-    #     coachID:
-    #       type: string
-    #       description: id number
-    #       example: '65656'
-    #     coachname:
-    #       type: string
-    #       description: coach fullname
-    #       example: 
-    #     teamname:
-    #       type: string
-    #       description: name of the specific team
-    #       example: Barcelona
-    #     playerPic:
-    #       type: string
-    #       format: URL
-    #       description: URL for the coach Pic
-    #       example: https://cloudinary.com/pini
-    
-    # CoachFullInfo:
-    #   type: object
-    #   required:
-    #     - coach
-    #     - age
-    #   properties:
-    #     coach:
-    #       $ref : '#/components/schemas/Coach'
-    #     age:
-    #       type: string      
 
     event:
       type: object
