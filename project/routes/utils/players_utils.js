@@ -17,7 +17,8 @@ async function getPlayerIdsByTeam(team_id) {
   return player_ids_list;
 }
 
-//this function get list of player's id and call to extract all relevant data of all players
+//this function get list of player's id and call to extract all relevant data of all players, 
+//function for player in teams
 async function getPlayersInfo(players_ids_list) {
   let promises = [];
   players_ids_list.map((id) =>
@@ -81,6 +82,7 @@ async function getPlayerfullDetails(player_id){
   const { name } = player_info.data.data.team.data;
   
   return{
+    id: player_id,
     name: fullname,
     image: image_path,
     position: position_id,
@@ -118,6 +120,7 @@ async function getPlayersByTeam(team_id) {
   let players_info = await getPlayersInfo(player_ids_list);
   return players_info;
 }
+
 //this function get player name and team name and return info of player that have specific name and associated to specific team
 async function getPlayerbasicDetailsByTeam(player_name, team_name){
   const all_player_with_same_name = await axios.get(`${api_domain}/players/search/${player_name}`, {
@@ -153,40 +156,40 @@ async function getPlayerbasicDetailsByTeam(player_name, team_name){
     }); 
   }
   //this function get player name and team name and return info of player that have specific name and associated to specific team
-  async function getPlayerbasicDetailsByPosition(player_name, position_name){
-    const all_player_with_same_name = await axios.get(`${api_domain}/players/search/${player_name}`, {
-      params: {
-        api_token: process.env.api_token,
-        include: "team.league, position", 
-        },
-      })
-      return all_player_with_same_name.data.data.map((player_info) => {
-        if(player_info != undefined && player_info.team != undefined && player_info.position != undefined)
+async function getPlayerbasicDetailsByPosition(player_name, position_name){
+  const all_player_with_same_name = await axios.get(`${api_domain}/players/search/${player_name}`, {
+    params: {
+      api_token: process.env.api_token,
+      include: "team.league, position", 
+      },
+    })
+    return all_player_with_same_name.data.data.map((player_info) => {
+      if(player_info != undefined && player_info.team != undefined && player_info.position != undefined)
+      {
+        const { player_id, fullname, image_path, position_id } = player_info;
+        if( player_info.position.data.name == position_name)
         {
-          const { player_id, fullname, image_path, position_id } = player_info;
-          if( player_info.position.data.name == position_name)
+          const { name } = player_info.team.data;
+          if(player_info.team.data.league != undefined)
           {
-            const { name } = player_info.team.data;
-            if(player_info.team.data.league != undefined)
+            const {id} = player_info.team.data.league.data;
+            if(id == 271) 
             {
-              const {id} = player_info.team.data.league.data;
-              if(id == 271) 
-              {
-                return {
-                    id: player_id,
-                    name: fullname,
-                    image: image_path,
-                    position: position_id,
-                    position_name: player_info.position.data.name,
-                    team_name: name,       
-                  };
-              }
+              return {
+                  id: player_id,
+                  name: fullname,
+                  image: image_path,
+                  position: position_id,
+                  position_name: player_info.position.data.name,
+                  team_name: name,       
+                };
             }
           }
-        }  
-        
-      }); 
-    }  
+        }
+      }  
+      
+    }); 
+  }  
 
 exports.getPlayersByTeam = getPlayersByTeam;
 exports.getPlayersInfo = getPlayersInfo;

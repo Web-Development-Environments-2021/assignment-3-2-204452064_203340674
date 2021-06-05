@@ -772,7 +772,6 @@ components:
           description: player weight
           example: 80 kg
 
-
     searchPosition:
       type: object
       required:
@@ -788,20 +787,18 @@ components:
           description: name of the position
           example: "Midfielder"
 
-
   # uses for represent favorities teams & add new team to favorities       
-
     Team:
       type: object
       required:
-        # - teamID
-        - teamname
-        - teamLogo
+        # # - teamID
+        # - teamname
+        # - teamLogo
       properties:
-        # teamID:
-        #   type: string
-        #   description: id number
-        #   example: '65656'
+        teamID:
+          type: integer
+          description: id number
+          example: 65656
         teamname:
           type: string
           description: name of the specific team

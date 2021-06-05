@@ -44,10 +44,9 @@ const api_domain = "https://soccer.sportmonks.com/api/v2.0";
           const {id} = team_info.league.data
           if(id == 271){
           return{
-            id: team_info.data.id,
+            id: team_info.id,
             name: name,
             image: logo_path,
-
             }; 
           }
         }
@@ -65,14 +64,15 @@ const api_domain = "https://soccer.sportmonks.com/api/v2.0";
         const {id} = team_info.data.data.league.data
         if(id == 271){
           return {
-            id: team_info.data.data.id,
+            // id: team_info.data.data.id,
+            id: team_ID,
             name: name,
             image: logo_path,
             coach : team_info.data.data.coach.data.fullname,
               
           };
         }
-      
+      //מה קורה אם הוא לא ב271 צריך להחזיר משהו אחר 
     }
   
   exports.getTeamsInfo = getTeamsInfo;
