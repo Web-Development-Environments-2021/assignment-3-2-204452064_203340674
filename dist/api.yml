@@ -208,7 +208,7 @@ paths:
         '200':
           description:  Game removed successfully
         '444':
-          description: no favorit games
+          description: no favorit games to delete
         '400':
           description: wrong input parameters 
   
