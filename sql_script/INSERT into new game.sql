@@ -1,0 +1,1 @@
+INSERT into [dbo].[games] Values ('2021-04-04' ,'20:30:01','Midtjylland', 'Vejle','Vejle Stadion','0','0','Jonathan')
