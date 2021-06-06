@@ -72,7 +72,6 @@ const api_domain = "https://soccer.sportmonks.com/api/v2.0";
               
           };
         }
-      //מה קורה אם הוא לא ב271 צריך להחזיר משהו אחר 
     }
   
   exports.getTeamsInfo = getTeamsInfo;

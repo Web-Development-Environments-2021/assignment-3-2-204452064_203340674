@@ -87,8 +87,6 @@ async function deletePastGameFromFavoriteTable(favorite_game){
   let Games_to_check_date = await getGameFavoriteForUser(id_favorite);
   let Game_to_delete = []
   for (var i=0; i< Games_to_check_date.length; i++){
-    // let game = await getGameFavoriteForUser(favorite_game[i].game_id) 
-    // if(game[0].date < today)
     if(Games_to_check_date[i].date < today)
     {
       Game_to_delete.push(Games_to_check_date[i].game_id);  
@@ -97,7 +95,6 @@ async function deletePastGameFromFavoriteTable(favorite_game){
   await deleteFromDB(Game_to_delete);
 }
 async function getGameFavoriteForUser(favorite_game){
-  //let id_favorite_game = favorite_game.map(function (a) {return "'" + a.replace("'", "''") + "'";}).join(",");
 //   const games = await DButils.execQuery(
 //     `select game_id, date from games where game_id='${favorite_game}'`
 // );
