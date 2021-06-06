@@ -46,11 +46,6 @@ async function markTeamAsFavorite(user_id, team_id) {
   await DButils.execQuery(
     `insert into users_favorites_teams values ('${user_id}',${team_id})`
   );
-// }
-  // catch(error){ 
-  //   next(error);
-
-  // }
 }
 //return all teams fav of a user
 async function getFavoriteTeam(user_id) {
@@ -81,9 +76,54 @@ async function GameNotExistInFav(user_id, game_id){
   return true;
 }
 
+async function deletePastGameFromFavoriteTable(favorite_game){
+
+  if (favorite_game.length ===0){
+    throw { status: 444, message: "no favorite games" };
+  }
+  let today = new Date();
+  let id_favorite =[]
+  favorite_game.map((element) => id_favorite.push(element.game_id));
+  let Games_to_check_date = await getGameFavoriteForUser(id_favorite);
+  let Game_to_delete = []
+  for (var i=0; i< Games_to_check_date.length; i++){
+    // let game = await getGameFavoriteForUser(favorite_game[i].game_id) 
+    // if(game[0].date < today)
+    if(Games_to_check_date[i].date < today)
+    {
+      Game_to_delete.push(Games_to_check_date[i].game_id);  
+    }
+  }
+  await deleteFromDB(Game_to_delete);
+}
+async function getGameFavoriteForUser(favorite_game){
+  //let id_favorite_game = favorite_game.map(function (a) {return "'" + a.replace("'", "''") + "'";}).join(",");
+//   const games = await DButils.execQuery(
+//     `select game_id, date from games where game_id='${favorite_game}'`
+// );
+  const games = await DButils.execQuery(
+      `select game_id, date from games where game_id in (${favorite_game})`
+  );
+  return games;
+}
+
+async function deleteFromDB(game_del){
+  if (game_del.length===0){
+    throw { status: 444, message: "no favorite games to delete" };
+  }
+  await DButils.execQuery(
+    `delete from users_favorites_games where game_id in (${game_del})`
+  );
+  //   await DButils.execQuery(
+  //   `delete from users_favorites_games where game_id in ('${game_del}')`
+  // );
+  
+} 
+
 exports.markPlayerAsFavorite = markPlayerAsFavorite;
 exports.getFavoritePlayers = getFavoritePlayers;
 exports.markGameAsFavorite = markGameAsFavorite;
 exports.getFavoriteGame = getFavoriteGame;
 exports.markTeamAsFavorite = markTeamAsFavorite;
 exports.getFavoriteTeam = getFavoriteTeam;
+exports.deletePastGameFromFavoriteTable= deletePastGameFromFavoriteTable;
