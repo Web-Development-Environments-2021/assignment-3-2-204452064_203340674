@@ -8,7 +8,7 @@ async function getfutureGameInfo(game_id_list){
     let today = new Date();
     for (var i=0; i< game_id_list.length; i++){
         let game = await getSpicificGameInfo(game_id_list[i]);
-        if(game[0].date > today)
+        if(game.date > today)
         {
             list_game_info.push(game);
         }
@@ -27,7 +27,7 @@ async function getSpicificGameInfo(game_id){
     const gamedet = await DButils.execQuery(
         `select date, time, home_team_name, away_team_name, field_name, referee from games where game_id='${game_id}'`
     );
-    return gamedet;
+    return gamedet[0];
 }
 
 
@@ -36,19 +36,19 @@ async function getSpicificGameInfo(game_id){
 async function getAllGame(){
     let allGameToReturn = {}
     let futureGames = []
-    let fastGame = []
+    let pastGames = []
     const gameDet = await GameFromDB();
     const eventsForGames=  await getAllEvents();
     for (var i=0; i< gameDet.length; i++){
         if(gameDet[i].goal_home != null){
             let gameEvents = await getAllEventForGame(eventsForGames, gameDet[i].game_id);
             gameDet[i].eventsSchedule = gameEvents;
-            fastGame.push(gameDet[i]);
+            pastGames.push(gameDet[i]);
         }
         else{
             futureGames.push(gameDet[i]);    
     }}
-    allGameToReturn.fastGame = fastGame;
+    allGameToReturn.pastGames = pastGames;
     allGameToReturn.futureGames = futureGames;  
     return allGameToReturn;
 }
