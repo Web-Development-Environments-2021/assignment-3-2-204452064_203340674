@@ -5,22 +5,6 @@ Names:
 Shay Erlich, 203340674
 Hallel helfand, 204452064
 
---------------------------------------------------------------------
-Env file:
-
-tedious_userName= shayhallel
-
-tedious_password= Se1993Hh
-
-tedious_server= server3-2.database.windows.net
-
-tedious_database= 3.2DB
-
-COOKIE_SECRET= shayANDhallel
-
-api_token= k7sFqtrMuRacf25VT3pQ5DrqyOjrls03zXvIyz8JNV3Cul7DxZRMJ6Y7VNZx
-
-bcrypt_saltRounds=13
 
 -----------------------------------------------------------------------
 We create the following tables:
