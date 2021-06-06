@@ -19,4 +19,14 @@ router.get("/searchAll", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get("/AllTeamsNames", async(req, res, next) =>{
+  try{
+    const allTeams = await league_utils.getAllTeamsAsArray(17328);
+    res.send(allTeams);
+  }
+  catch (error) {
+    next(error);
+  }
+})
 module.exports = router;

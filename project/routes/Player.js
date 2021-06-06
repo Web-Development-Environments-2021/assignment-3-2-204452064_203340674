@@ -8,7 +8,10 @@ router.get("/basicInfo/:playerName", async(req, res, next) =>{
     
     try {
         let player_det = await players_utils.getPlayerbasicDetailsByName(req.params.playerName);
-        res.send(player_det);
+        var player_det_filtered = player_det.filter(function(x) {
+            return x !== undefined;
+       });
+        res.send(player_det_filtered);
     } catch (error) {
         next(error);
     }
@@ -25,7 +28,10 @@ router.get("/fullInfo/:playerId", async(req, res, next) =>{
 router.get("/basicInfoByTeam/:playerName/:teamName", async(req, res, next) =>{
     try{
         const player_det = await players_utils.getPlayerbasicDetailsByTeam(req.params.playerName, req.params.teamName);
-        res.send(player_det);
+        var player_det_filtered = player_det.filter(function(x) {
+            return x !== undefined;
+       });
+        res.send(player_det_filtered);
     }catch (error){
         next(error);
     }
@@ -33,7 +39,10 @@ router.get("/basicInfoByTeam/:playerName/:teamName", async(req, res, next) =>{
 router.get("/basicInfoByPosition/:playerName/:positionName", async(req, res, next) =>{
     try{
         const player_det = await players_utils.getPlayerbasicDetailsByPosition(req.params.playerName, req.params.positionName);
-        res.send(player_det);
+        var player_det_filtered = player_det.filter(function(x) {
+            return x !== undefined;
+       });
+        res.send(player_det_filtered);
     }catch (error){
         next(error);
     }

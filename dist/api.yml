@@ -247,7 +247,52 @@ paths:
                   $ref: '#/components/schemas/searchItems'
         '400':
           description: wrong input parameters
+
+  /league/AllTeamsNames:
+    get:
+      tags:
+      - league
+      summary:  teams names show on screeen
+      description: the names users can search     
+      responses:
+        '200' : 
+          description: names of teams show
+          content:
+            application/json:
+              schema:
+                type: array   
+                items:
+                  type: string
+        '400':
+          description: wrong input parameters        
+
+# /Player/basicInfo/{playerId}:
+  #   get:
+  #     tags:
+  #     - player
+  #     summary: player details show on screen
+  #     description: all users can watch details
+  #     operationId: PlayerDetails
+  #     parameters:
+  #     - name: playerID
+  #       in: path
+  #       description: id for get player's basic details
+  #       required: true
+  #       schema:
+  #         type: string
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref : '#/components/schemas/Player'
+  #       '400':
+  #         description: invalid input 
+  
+
  
+
   ##self page of player
   /Player/fullInfo/{playerId}:
     get:
