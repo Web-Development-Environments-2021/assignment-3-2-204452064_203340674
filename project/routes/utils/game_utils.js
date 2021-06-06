@@ -30,6 +30,8 @@ async function getSpicificGameInfo(game_id){
     return gamedet;
 }
 
+
+
 // return all the game, past and future
 async function getAllGame(){
     let allGameToReturn = {}
