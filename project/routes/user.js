@@ -71,7 +71,7 @@ router.get("/favoriteGames", async (req, res, next) => {
     // let favorite_game = {};
     const game_ids = await users_utils.getFavoriteGame(user_id);
     let game_ids_array = [];
-    game_ids.map((element) => game_ids_array.push(element.game_id)); //extracting the players ids into array
+    game_ids.map((element) => game_ids_array.push(element.game_id)); //extracting the games ids into array
     const results_game = await games_utils.getfutureGameInfo(game_ids_array);
     res.status(200).send(results_game);
   } catch (error) {
@@ -79,14 +79,18 @@ router.get("/favoriteGames", async (req, res, next) => {
   }
 });
 
-// router.delete("/favoriteGames", async (req, res, next) => {
-//   try {
-//     const user_id = req.session.user_id;
-
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.delete("/favoriteGames", async (req, res, next) => {
+  try {
+    const user_id = req.session.user_id;
+    const favorite_game = await users_utils.getFavoriteGame(user_id);
+    // let id_favorite_game = []
+    // favorite_game.map((element) => id_favorite_game.push(element.game_id));
+    await users_utils.deletePastGameFromFavoriteTable(favorite_game);
+    res.status(200).send("delete past game from favorite")
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.post("/favoriteTeams", async (req, res, next) => {
   try {

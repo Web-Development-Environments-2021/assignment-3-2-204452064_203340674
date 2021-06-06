@@ -204,16 +204,11 @@ paths:
       summary: game removed from favorities
       description: can only be done by the logged in user.
       operationId: removeGameFromFavorities
-      parameters:
-      - name: gameID
-        in: query
-        description: game's id to remove
-        required: true
-        schema:
-          type: string
       responses:
         '200':
           description:  Game removed successfully
+        '444':
+          description: no favorit games
         '400':
           description: wrong input parameters 
   
@@ -252,31 +247,7 @@ paths:
                   $ref: '#/components/schemas/searchItems'
         '400':
           description: wrong input parameters
-
-# /Player/basicInfo/{playerId}:
-  #   get:
-  #     tags:
-  #     - player
-  #     summary: player details show on screen
-  #     description: all users can watch details
-  #     operationId: PlayerDetails
-  #     parameters:
-  #     - name: playerID
-  #       in: path
-  #       description: id for get player's basic details
-  #       required: true
-  #       schema:
-  #         type: string
-  #     responses:
-  #       '200':
-  #         description: successful operation
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref : '#/components/schemas/Player'
-  #       '400':
-  #         description: invalid input 
-  
+ 
   ##self page of player
   /Player/fullInfo/{playerId}:
     get:
@@ -650,12 +621,6 @@ components:
           example: mick@2mini 
     Player:
           type: object
-          # required:
-          #   - playerID
-          #   - playername
-          #   - teamname
-          #   - playerPic
-          #   - playerNum
           properties:
             # playerID:
             #   type: string
