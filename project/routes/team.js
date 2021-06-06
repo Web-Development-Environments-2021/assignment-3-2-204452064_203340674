@@ -28,7 +28,10 @@ router.get("/fullInfo/:teamID", async (req, res, next) => {
 router.get("/basicInfoName/:teamName", async(req, res, next) =>{    
   try {
       let team_det = await teams_utils.getTeambasicDetailsByName(req.params.teamName);
-      res.send(team_det);
+      var team_det_filtered = team_det.filter(function(x) {
+        return x !== undefined;
+   });
+      res.send(team_det_filtered);
   } catch (error) {
       next(error);
   }

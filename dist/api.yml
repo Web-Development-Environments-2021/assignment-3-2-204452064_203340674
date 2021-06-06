@@ -252,6 +252,23 @@ paths:
                   $ref: '#/components/schemas/searchItems'
         '400':
           description: wrong input parameters
+  /league/AllTeamsNames:
+    get:
+      tags:
+      - league
+      summary:  teams names show on screeen
+      description: the names users can search     
+      responses:
+        '200' : 
+          description: names of teams show
+          content:
+            application/json:
+              schema:
+                type: array   
+                items:
+                  type: string
+        '400':
+          description: wrong input parameters        
 
 # /Player/basicInfo/{playerId}:
   #   get:

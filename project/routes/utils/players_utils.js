@@ -47,6 +47,8 @@ async function getPlayerbasicDetailsByName(player_name){
       if(player_info != undefined)
       {
         const { player_id, fullname, image_path, position_id } = player_info;
+        if(fullname.includes(player_name))
+        {
         if( player_info.team != undefined)
         {
           const { name } = player_info.team.data;
@@ -65,6 +67,7 @@ async function getPlayerbasicDetailsByName(player_name){
             }
           }
         }
+      }
       }  
       
     }); 
@@ -133,6 +136,8 @@ async function getPlayerbasicDetailsByTeam(player_name, team_name){
       if(player_info != undefined && player_info.team != undefined)
       {
         const { player_id, fullname, image_path, position_id } = player_info;
+        if(fullname.includes(player_name))
+        {
         if( player_info.team.data.name == team_name)
         {
           const { name } = player_info.team.data;
@@ -151,6 +156,7 @@ async function getPlayerbasicDetailsByTeam(player_name, team_name){
             }
           }
         }
+      }
       }  
       
     }); 
@@ -167,28 +173,30 @@ async function getPlayerbasicDetailsByPosition(player_name, position_name){
       if(player_info != undefined && player_info.team != undefined && player_info.position != undefined)
       {
         const { player_id, fullname, image_path, position_id } = player_info;
-        if( player_info.position.data.name == position_name)
+        if(fullname.includes(player_name))
         {
-          const { name } = player_info.team.data;
-          if(player_info.team.data.league != undefined)
+          if( player_info.position.data.name == position_name)
           {
-            const {id} = player_info.team.data.league.data;
-            if(id == 271) 
+            const { name } = player_info.team.data;
+            if(player_info.team.data.league != undefined)
             {
-              return {
-                  id: player_id,
-                  name: fullname,
-                  image: image_path,
-                  position: position_id,
-                  position_name: player_info.position.data.name,
-                  team_name: name,       
-                };
+              const {id} = player_info.team.data.league.data;
+              if(id == 271) 
+              {
+                return {
+                    id: player_id,
+                    name: fullname,
+                    image: image_path,
+                    position: position_id,
+                    position_name: player_info.position.data.name,
+                    team_name: name,       
+                  };
+              }
             }
           }
-        }
-      }  
-      
-    }); 
+        } 
+      }
+      }); 
   }  
 
 exports.getPlayersByTeam = getPlayersByTeam;

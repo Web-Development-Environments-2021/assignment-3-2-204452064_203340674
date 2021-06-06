@@ -147,7 +147,8 @@ async function checkIfTeamsFree(allGames, gameDate, home, away){
 async function checkIfFieldFree(allGames, gameDate, field){
     if (allGames.find((game_info) => game_info.date.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10) === gameDate && 
   (game_info.field_name === field)))
-      { return "this field is not free";}
+      { //return "this field is not free";
+        throw{status:409, message: "this field is not free"}}
     else{return null}
 
 }
