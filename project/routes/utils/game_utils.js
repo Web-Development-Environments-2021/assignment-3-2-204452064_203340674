@@ -155,6 +155,15 @@ async function checkIfFieldFree(allGames, gameDate, field){
 
 }
 
+async function checkIfRefereeFree(allGames, gameDate, referee){
+    if (allGames.find((game_info) => game_info.date.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10) === gameDate && 
+  (game_info.referee === referee)))
+      { 
+        throw{status:409, message: "referee is not free"}}
+    else{return null}
+
+}
+
 async function insertNewGame(game_info){
     const gameDate = game_info.date;
     let today = new Date().toISOString().replace(/T/, ' ').slice(0,10);
@@ -165,6 +174,7 @@ async function insertNewGame(game_info){
     const allGames = await GameFromDB();
     const messTeam = await checkIfTeamsFree(allGames, gameDate, game_info.home_team_name, game_info.away_team_name);     
     const messField = await checkIfFieldFree(allGames, gameDate, game_info.field_name);
+    const messReferee = await checkIfRefereeFree(allGames, gameDate, game_info.referee)
     if (messTeam != null){
         //return messTeam
         throw{status:409, message: messTeam}
