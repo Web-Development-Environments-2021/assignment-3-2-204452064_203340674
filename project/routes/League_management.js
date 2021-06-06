@@ -17,12 +17,6 @@ router.use(function (req, res, next) {
 router.post("/basicInfo", async (req, res, next) => { 
   try { 
     const mess = await games_utils.insertNewGame(req.body);
-    // if(mess != "game created" ){ 
-    //   res.status(409).send(mess);
-    // }
-    // else{
-    //   res.status(201).send(mess);
-    // }
     res.status(201).send(mess);
   } catch (error) {
     next(error);
