@@ -599,8 +599,10 @@ paths:
           description: successful operation
           content:
             application/json:
-              schema:
-                $ref : '#/components/schemas/Team'
+            schema:
+                type: array   
+                items:
+                  type: '#/components/schemas/Team'
         '204':
           description: No Content       
         '400':
@@ -801,7 +803,8 @@ components:
       properties:
         lastGames:
           type: array
-          items: '#/components/schemas/OldGame'
+          items:
+            $ref: '#/components/schemas/OldGame'
         futureGame:
           type: array
           items: 
@@ -812,6 +815,10 @@ components:
     Game:
       type: object
       properties:
+        # game_id:
+        #   type: integer
+        #   example: 1
+        #   description: id of the game
         date:
           type: string
           format: date
@@ -937,6 +944,10 @@ components:
     event:
       type: object
       properties:
+        eventID:
+          type: integer
+          example: 1 
+          description: id of event game
         gameID:
           type: integer
           example: 1
