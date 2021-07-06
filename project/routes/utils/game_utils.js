@@ -8,9 +8,9 @@ async function getfutureGameInfo(game_id_list){
     let today = new Date();
     for (var i=0; i< game_id_list.length; i++){
         let game = await getSpicificGameInfo(game_id_list[i]);
-        if(game[0].date > today)
+        if(game.date > today)
         {
-            list_game_info.push(game);
+            list_game_info.push(game[0]);
         }
     }
     // game_id_list.map((game_id)=>
@@ -25,9 +25,9 @@ async function getfutureGameInfo(game_id_list){
 //get info of specific game 
 async function getSpicificGameInfo(game_id){
     const gamedet = await DButils.execQuery(
-        `select date, time, home_team_name, away_team_name, field_name, referee from games where game_id='${game_id}'`
+        `select game_id, date, time, home_team_name, away_team_name, field_name, referee from games where game_id='${game_id}'`
     );
-    return gamedet;
+    return gamedet[0];
 }
 
 
@@ -36,19 +36,19 @@ async function getSpicificGameInfo(game_id){
 async function getAllGame(){
     let allGameToReturn = {}
     let futureGames = []
-    let fastGame = []
+    let pastGames = []
     const gameDet = await GameFromDB();
     const eventsForGames=  await getAllEvents();
     for (var i=0; i< gameDet.length; i++){
         if(gameDet[i].goal_home != null){
             let gameEvents = await getAllEventForGame(eventsForGames, gameDet[i].game_id);
             gameDet[i].eventsSchedule = gameEvents;
-            fastGame.push(gameDet[i]);
+            pastGames.push(gameDet[i]);
         }
         else{
             futureGames.push(gameDet[i]);    
     }}
-    allGameToReturn.fastGame = fastGame;
+    allGameToReturn.pastGames = pastGames;
     allGameToReturn.futureGames = futureGames;  
     return allGameToReturn;
 }
@@ -62,7 +62,7 @@ async function GameFromDB(){
 
 async function getAllEvents(){
     const eventsForGames=  await DButils.execQuery(
-        `select game_id, date, time, minute, event_name, player_id_1, player_id_2 from games_events`
+        `select event_id, game_id, date, time, minute, event_name, player_id_1, player_id_2 from games_events`
     );
     return eventsForGames;
 }
@@ -155,6 +155,15 @@ async function checkIfFieldFree(allGames, gameDate, field){
 
 }
 
+async function checkIfRefereeFree(allGames, gameDate, referee){
+    if (allGames.find((game_info) => game_info.date.toISOString().replace(/T/, ' ').replace(/\..+/, '').slice(0,10) === gameDate && 
+  (game_info.referee === referee)))
+      { 
+        throw{status:409, message: "referee is not free"}}
+    else{return null}
+
+}
+
 async function insertNewGame(game_info){
     const gameDate = game_info.date;
     let today = new Date().toISOString().replace(/T/, ' ').slice(0,10);
@@ -165,6 +174,7 @@ async function insertNewGame(game_info){
     const allGames = await GameFromDB();
     const messTeam = await checkIfTeamsFree(allGames, gameDate, game_info.home_team_name, game_info.away_team_name);     
     const messField = await checkIfFieldFree(allGames, gameDate, game_info.field_name);
+    const messReferee = await checkIfRefereeFree(allGames, gameDate, game_info.referee)
     if (messTeam != null){
         //return messTeam
         throw{status:409, message: messTeam}
