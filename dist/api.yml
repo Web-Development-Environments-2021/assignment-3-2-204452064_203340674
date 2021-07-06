@@ -241,10 +241,8 @@ paths:
           description: names of items show
           content:
             application/json:
-              schema:
-                type: array   
-                items:
-                  $ref: '#/components/schemas/searchItems'
+              schema:   
+                $ref: '#/components/schemas/searchItems'
         '400':
           description: wrong input parameters
 

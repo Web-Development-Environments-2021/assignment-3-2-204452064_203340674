@@ -85,7 +85,7 @@ async function getPlayerfullDetails(player_id){
   const { name } = player_info.data.data.team.data;
   
   return{
-    id: player_id,
+    id: parseInt(player_id),
     name: fullname,
     image: image_path,
     position: position_id,
@@ -101,6 +101,9 @@ async function getPlayerfullDetails(player_id){
 }
 //this function get list of players info and extract specific fields 
 function extractRelevantPlayerData(players_info) {
+  //  to remove !!!!!!!!!!!!
+  // players_info = players_info.slice(0, 5);
+  // to remove !!!!!!!!!!!!!!!1
   return players_info.map((player_info) => {
     if (player_info.data.data != undefined){
     

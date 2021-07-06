@@ -61,7 +61,7 @@ async function getAllData(season_id){
     allTeams.push(team_info.name);
     allPlayers = allPlayers.concat(team_info.squad.data.map((player_info)=>{
       allPositions.add(player_info.player.data.position.data.name);
-      return player_info.player.data.display_name;
+      return player_info.player.data.fullname;
     }))
   });
   return{

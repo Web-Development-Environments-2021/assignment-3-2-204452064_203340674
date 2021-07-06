@@ -10,7 +10,7 @@ router.get("/fullInfo/:teamID", async (req, res, next) => {
   try {
     //logo and name
     const team_name_logo_coach = await teams_utils.getTeambasicDetailsByID(req.params.teamID);
-    team_details.id = req.params.teamID;
+    team_details.id = parseInt(req.params.teamID); 
     team_details.name = team_name_logo_coach.name;
     team_details.image = team_name_logo_coach.image;
     team_details.coach = team_name_logo_coach.coach;

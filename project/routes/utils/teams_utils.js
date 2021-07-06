@@ -37,10 +37,12 @@ const api_domain = "https://soccer.sportmonks.com/api/v2.0";
         include: "league", 
         },
       })
+      
       return all_team_with_same_name.data.data.map((team_info) =>{
         if(team_info != undefined)
         {
           const {  name , logo_path } = team_info;
+          if(team_info.league != undefined){
           const {id} = team_info.league.data
           if(id == 271){
           return{
@@ -49,6 +51,8 @@ const api_domain = "https://soccer.sportmonks.com/api/v2.0";
             image: logo_path,
             }; 
           }
+        }
+        
         }
       })
     }
