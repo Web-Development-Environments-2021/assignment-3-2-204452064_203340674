@@ -667,10 +667,10 @@ components:
     Player:
           type: object
           properties:
-            # playerID:
-            #   type: string
-            #   description: id number
-            #   example: '65656'
+            playerID:
+              type: number
+              description: id number
+              example: '65656'
             playername:
               type: string
               description: fullname of player
@@ -739,7 +739,7 @@ components:
         - name
       properties:
         id:
-          type: int
+          type: number
           description: id number of position
           example: 3
         name:
