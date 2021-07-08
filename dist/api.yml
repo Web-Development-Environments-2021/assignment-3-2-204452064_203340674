@@ -517,7 +517,7 @@ paths:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/event'
+                $ref: '#/components/schemas/eventToAdd'
       responses:
         '201':
           description: events update to game
@@ -938,7 +938,6 @@ components:
           description: all positions options
           items:
             type: string
-
     event:
       type: object
       properties:
@@ -973,3 +972,35 @@ components:
         player2:
           type: string
           example: shimon gershon
+    
+    eventToAdd:
+      type: object
+      properties:
+        gameID:
+          type: integer
+          example: 1
+          description : id of game
+        date:
+          type: string
+          format: date
+          example: '2011-08-08'
+          description : date of game
+        time:
+          type: string
+          format: time
+          example: '09:09:09'
+          description : time of event 
+        minAtGame:
+          type: integer
+          example: 40
+          description: specific min
+        eventName:
+          type: string
+          example: faul
+        player1:
+          type: string
+          example: ronaldo
+        player2:
+          type: string
+          example: shimon gershon
+          
