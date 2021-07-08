@@ -23,8 +23,8 @@ const api_domain = "https://soccer.sportmonks.com/api/v2.0";
       return {
         id: id,
         name: name,
-        short_name: short_code,
-        // image: logo_path,
+        short_name: short_code || "",
+        image: logo_path,
         //country: name,  
       };
     });

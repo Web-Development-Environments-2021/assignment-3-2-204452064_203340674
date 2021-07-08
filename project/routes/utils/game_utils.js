@@ -128,12 +128,21 @@ async function getRefereesNames(){
     const all_referee = await DButils.execQuery(
         `select referee_name from referee`
     );
-    return all_referee;
+    if(all_referee.length>0){
+    let referees = []
+    for (var i = 0; i<all_referee.length; i++){
+        referees[i] = all_referee[i]["referee_name"]
+    }
+    return referees;}
 }
 //get all fields in db
 async function getFieldsNames(){
     const all_fields = await DButils.execQuery(`select field_name from fields`);
-    return all_fields;
+    let fields = []
+    for (var i = 0; i<all_fields.length; i++){
+        fields[i] = all_fields[i]["field_name"]
+    }
+    return fields;
 }
 //this function check if game date is free for two teams return message
 async function checkIfTeamsFree(allGames, gameDate, home, away){
