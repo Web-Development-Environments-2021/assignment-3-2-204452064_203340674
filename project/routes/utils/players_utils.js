@@ -101,13 +101,11 @@ async function getPlayerfullDetails(player_id){
 }
 //this function get list of players info and extract specific fields 
 function extractRelevantPlayerData(players_info) {
-  //  to remove !!!!!!!!!!!!
-  // players_info = players_info.slice(0, 5);
-  // to remove !!!!!!!!!!!!!!!1
   return players_info.map((player_info) => {
     if (player_info.data.data != undefined){
     
     const { player_id ,fullname, image_path, position_id } = player_info.data.data;
+    if(fullname == undefined){fullname = "";}
     const { name } = player_info.data.data.team.data;
     const { length } = player_info.data.data.trophies.data;
     return {
