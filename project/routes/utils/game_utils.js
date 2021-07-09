@@ -10,7 +10,9 @@ async function getfutureGameInfo(game_id_list){
         let game = await getSpicificGameInfo(game_id_list[i]);
         if(game.date > today)
         {
-            list_game_info.push(game[0]);
+            game.date = game.date.toISOString().replace(/T/, ' ').slice(0,10);
+            game.time = game.time.toISOString().replace(/\..+/, '').slice(11,20);
+            list_game_info.push(game);
         }
     }
     // game_id_list.map((game_id)=>
