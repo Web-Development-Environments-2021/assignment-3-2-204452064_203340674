@@ -744,7 +744,12 @@ components:
         nationality:          
           type: string
           description: player nationality
-          example: Scotland  
+          example: Scotland 
+        birthDate:
+          type: string
+          format: date
+          example: '2011-08-08'
+          description : date of birth
         birthcountry:
           type: string
           description: player birth country
