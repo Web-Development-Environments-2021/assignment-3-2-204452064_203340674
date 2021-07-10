@@ -552,6 +552,32 @@ paths:
           description: invalid input
           
   # team page        
+  /Team/fullInfoByName/{teamName}:
+     get:
+      tags:
+      - Team
+      summary: team detailes show on screen 
+      description: all info of specific team
+      operationId: TeamFullDetailesByName
+      parameters:
+      - name: teamName
+        in: path
+        description: name for get game full detailes
+        required: true
+        schema: 
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/TeamFullInfo'
+        '400':
+          description: invalid input
+        '404':
+          description: team id isnt exist 
+
   /Team/fullInfo/{teamID}:
     get:
       tags:
@@ -576,7 +602,7 @@ paths:
         '400':
           description: invalid input
         '404':
-          description: team id isnt exist  
+          description: team id isnt exist   
   
   /Team/basicInfoName/{teamName}:
     get:
